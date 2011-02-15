@@ -1,9 +1,12 @@
 (ns tile-game.core
   (:require (clojure.contrib seq math))
   (:import (javax.swing JFrame JPanel )
-           (java.awt Color Graphics Graphics2D Dimension Font)))
+           (java.awt Color Graphics Graphics2D Dimension Font)
+           (java.awt.event KeyListener KeyEvent)))
 
-(def dim 3)
+(set! *warn-on-reflection* true)
+
+(def dim 5)
 (def scale 150)
 
 (def colors [Color/RED Color/ORANGE Color/YELLOW Color/GREEN
@@ -12,11 +15,17 @@
 (defn bounded-coords? [[x y]]
   (and (>= x 0) (< x dim) (>= y 0) (< y dim)))
 
+(defn manhattan [p1 p2]
+  (map #(clojure.contrib.math/abs (- %1 %2)) p1 p2))
+
+(defn distance [p1 p2]
+  (apply + (manhattan p1 p2)))
+
 (defn location [board [x y]]
   (nth board (+ (* x dim) y)))
 
 (defn position [board piece]
-  (.indexOf board piece))
+  (first (clojure.contrib.seq/positions #(= piece %) board)))
 
 (defn coords [board piece]
   (let [pos (position board piece)]
@@ -32,6 +41,14 @@
 (def dir-delta {:up [0 1] :down [0 -1]
                 :left [-1 0] :right [1 0]})
 
+(defn move-direction [board direction]
+  (let [[x y] (coords board 0)
+        [dx dy] (dir-delta direction)
+        coords [(+ x dx) (+ y dy)]]
+    (if (bounded-coords? coords)
+      (location board coords)
+      0)))
+
 (defn adjacent-coords [board [x y]]
   (let [adj-loc (map (fn [[dx dy]] [(+ x dx) (+ y dy)])
                      (vals dir-delta))]
@@ -42,10 +59,7 @@
        (adjacent-coords board (coords board piece))))
 
 (defn adjacent? [board p1 p2]
-  (let [[dx dy] (map #(Math/abs (- %1 %2))
-                     (coords board p1)
-                     (coords board p2))]
-    (= 1 (+ dx dy))))
+  (= 1 (distance (coords board p1) (coords board p2))))
 
 (defn can-move? [board piece]
   (adjacent? board 0 piece))
@@ -79,51 +93,74 @@
 
 (def solve (partial solver best-carlo '()))
 
-(defn run-solution [solution]
-  (doseq [next solution]
-    (render-move next)))
-
 ;; (defn path-to
-;;   [board piece location]
-;;   (let [empty-pos (position board 0)
-;;         pos (position board piece)]
-;;     (if (= empty-pos pos)
+;;   [board piece [goal-x goal-y :as goal]]
+;;   (let [[empty-x empty-y :as empty] (coords board 0)
+;;         [x y :as current] (coords board piece)]
+;;     (if (= current goal)
 ;;       '()
-;;       (path-to board location)))
-;;   [board location]
-;;   (cons ))
+;;       (cons (path-to board ))))
+;;   [board goal]
+;;   ())
 
-(defn render [#^Graphics2D g]
-  (dorun
-   (for [x (range dim) y (range dim)]
-     (let [tile (location @*board* [x y])
-           color (if (= tile 0)
-             Color/WHITE
-             (colors (rem tile (count colors))))
-           [cx cy] [(* x scale) (* y scale)]]
+(defn path-to [board goal]
+  (let [current (coords board 0)]
+    (if (= current goal)
+      ()
+      (let [next (first (sort-by #(distance goal (coords board %))
+                                 (legal-moves board)))]
+        (cons next (path-to (move board next) goal))))))
+
+(defn render-tile [#^Graphics g board [x y]]
+  (let [tile (location board [x y])
+        color (if (= tile 0)
+                Color/WHITE
+                (colors (rem tile (count colors))))
+        [cx cy] [(* x scale) (* y scale)]]
        (doto g
          (.setColor color)
          (.fillRect cx cy scale scale)
-         (.setColor (if (= Color/BLACK color) Color/WHITE Color/BLACK))
-         (.setFont (Font. "Serif" (. Font PLAIN) 24))
-         (.drawString (.toString tile)
-                      (+ cx (quot scale 2))
-                      (+ cy (quot scale 2))
-                      ))))))
+         (.setColor Color/BLACK)
+         (.setFont (Font. "Serif" (. Font PLAIN) 32)))
+       (when (> tile 0) (.drawString g (format "%d" tile)
+                                     (+ cx (quot scale 2))
+                                     (+ cy (quot scale 2))))))
 
 (def *board* (ref (shuffle (vec (range 0 (* dim dim))))))
 
+(declare process-key)
 (def panel
-  (let [size (* dim scale)]
-    (doto (proxy [JPanel] []
-            (paint [g] (render g)))
-      (.setPreferredSize (Dimension. size size)))))
+  (let [size (* dim scale)
+        panel (proxy [JPanel KeyListener] []
+                (paint [g]
+                       (dorun (for [x (range dim) y (range dim)]
+                                (render-tile g @*board* [x y]))))
+                (keyPressed [#^KeyEvent e] (process-key (.getKeyCode e)))
+                (keyReleased [e]) ; do nothing
+                (keyTyped [e]) ; do nothing
+                )]
+    (doto panel
+      (.setPreferredSize (Dimension. size size))
+      (.setFocusable true)
+      (.addKeyListener panel))))
 
 (defn render-move [piece]
   (dosync (when (can-move? @*board* piece)
             (alter *board* move piece)))
-  (. panel (repaint)))
+  (. #^JPanel panel (repaint)))
 
-(def frame (doto (new JFrame) (.add panel) .pack .show))
+(defn process-key [code]
+  (let [dir-move (comp render-move (partial move-direction @*board*))]
+       (condp = code
+           KeyEvent/VK_LEFT  (dir-move :left)
+           KeyEvent/VK_RIGHT (dir-move :right)
+           KeyEvent/VK_UP    (dir-move :down)
+           KeyEvent/VK_DOWN  (dir-move :up)
+           KeyEvent/VK_Q     (.dispose #^JFrame frame))))
 
+(defn execute-moves [moves]
+  (doseq [m moves]
+    (render-move m)
+    (Thread/sleep 100)))
 
+(def frame (doto (new JFrame) (.add #^JPanel panel) .pack .show))
