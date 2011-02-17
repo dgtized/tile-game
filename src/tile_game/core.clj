@@ -141,9 +141,11 @@
                              (alter *board* move piece)))
                    (.repaint panel))
                 ([piece & moves]
-                   (doseq [m (cons piece moves)]
-                     (move! m)
-                     (Thread/sleep 100))))]
+                   (prn piece moves)
+                   (move! piece)
+                   (send (agent moves) #(do
+                                         (Thread/sleep 500)
+                                         (apply move! %1)))))]
     (doto panel
       (.setPreferredSize (Dimension. size size))
       (.setFocusable true)
@@ -157,6 +159,7 @@
                            KeyEvent/VK_UP    (dir-move :up)
                            KeyEvent/VK_DOWN  (dir-move :down)
                            KeyEvent/VK_Q     (.dispose #^JFrame frame)
+                           KeyEvent/VK_S     (apply move! (path-to @*board* [0 0]))
                            true))))))
     (doto frame (.setContentPane panel) .pack .show)
     move!))
