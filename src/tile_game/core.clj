@@ -67,7 +67,7 @@
 (defn legal-moves [board]
   (filter #(can-move? board %) board))
 
-(defn solved? [board] 
+(defn solved? [board]
   (= (concat (range 1 (count board)) '(0)) board))
 
 (defn solver [best-move history board]
@@ -123,10 +123,10 @@
          (.setColor Color/BLACK)
          (.setFont (Font. "Serif" (. Font PLAIN) 32)))
        (when (> tile 0) (.drawString g (format "%d" tile)
-                                     (+ cx (quot scale 2))
-                                     (+ cy (quot scale 2))))))
+                                     (int (+ cx (quot scale 2)))
+                                     (int (+ cy (quot scale 2)))))))
 
-(def *board* (ref (shuffle (vec (range 0 (* dim dim))))))
+(def *board* (ref (shuffle (vec (range (* dim dim))))))
 
 (defn main []
   (let [size (* dim scale)
@@ -149,7 +149,7 @@
       (.setFocusable true)
       (.addKeyListener
        (proxy [KeyAdapter] []
-         (keyPressed [e]
+         (keyPressed [#^KeyEvent e]
                      (let [dir-move (comp move! (partial move-direction @*board*))]
                        (condp = (.getKeyCode e)
                            KeyEvent/VK_LEFT  (dir-move :left)
