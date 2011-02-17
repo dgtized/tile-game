@@ -2,7 +2,7 @@
   (:require (clojure.contrib seq math))
   (:import (javax.swing JFrame JPanel )
            (java.awt Color Graphics Graphics2D Dimension Font)
-           (java.awt.event KeyListener KeyEvent)))
+           (java.awt.event KeyAdapter KeyEvent)))
 
 (set! *warn-on-reflection* true)
 
@@ -38,7 +38,7 @@
         empty-pos piece
         pos 0)))
 
-(def dir-delta {:up [0 1] :down [0 -1]
+(def dir-delta {:up [0 -1] :down [0 1]
                 :left [-1 0] :right [1 0]})
 
 (defn move-direction [board direction]
@@ -128,39 +128,37 @@
 
 (def *board* (ref (shuffle (vec (range 0 (* dim dim))))))
 
-(declare process-key)
-(def panel
+(defn main []
   (let [size (* dim scale)
-        panel (proxy [JPanel KeyListener] []
-                (paint [g]
-                       (dorun (for [x (range dim) y (range dim)]
-                                (render-tile g @*board* [x y]))))
-                (keyPressed [#^KeyEvent e] (process-key (.getKeyCode e)))
-                (keyReleased [e]) ; do nothing
-                (keyTyped [e]) ; do nothing
-                )]
+        #^JFrame frame (JFrame.)
+        #^JPanel panel (proxy [JPanel] []
+                         (paint [g]
+                                (dorun (for [x (range dim) y (range dim)]
+                                         (render-tile g @*board* [x y])))))
+        move! (fn
+                ([piece]
+                   (dosync (when (can-move? @*board* piece)
+                             (alter *board* move piece)))
+                   (.repaint panel))
+                ([piece & moves]
+                   (doseq [m (cons piece moves)]
+                     (move! m)
+                     (Thread/sleep 100))))]
     (doto panel
       (.setPreferredSize (Dimension. size size))
       (.setFocusable true)
-      (.addKeyListener panel))))
+      (.addKeyListener
+       (proxy [KeyAdapter] []
+         (keyPressed [e]
+                     (let [dir-move (comp move! (partial move-direction @*board*))]
+                       (condp = (.getKeyCode e)
+                           KeyEvent/VK_LEFT  (dir-move :left)
+                           KeyEvent/VK_RIGHT (dir-move :right)
+                           KeyEvent/VK_UP    (dir-move :up)
+                           KeyEvent/VK_DOWN  (dir-move :down)
+                           KeyEvent/VK_Q     (.dispose #^JFrame frame)
+                           true))))))
+    (doto frame (.setContentPane panel) .pack .show)
+    move!))
 
-(defn render-move [piece]
-  (dosync (when (can-move? @*board* piece)
-            (alter *board* move piece)))
-  (. #^JPanel panel (repaint)))
-
-(defn process-key [code]
-  (let [dir-move (comp render-move (partial move-direction @*board*))]
-       (condp = code
-           KeyEvent/VK_LEFT  (dir-move :left)
-           KeyEvent/VK_RIGHT (dir-move :right)
-           KeyEvent/VK_UP    (dir-move :down)
-           KeyEvent/VK_DOWN  (dir-move :up)
-           KeyEvent/VK_Q     (.dispose #^JFrame frame))))
-
-(defn execute-moves [moves]
-  (doseq [m moves]
-    (render-move m)
-    (Thread/sleep 100)))
-
-(def frame (doto (new JFrame) (.add #^JPanel panel) .pack .show))
+(def move! (main))
