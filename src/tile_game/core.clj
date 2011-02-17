@@ -67,8 +67,8 @@
 (defn legal-moves [board]
   (filter #(can-move? board %) board))
 
-(defn solved? [board]
-  (not-any? false? (keep-indexed #(= %1 %2) board)))
+(defn solved? [board] 
+  (= (concat (range 1 (count board)) '(0)) board))
 
 (defn solver [best-move history board]
   (if (solved? board)
@@ -161,4 +161,5 @@
     (doto frame (.setContentPane panel) .pack .show)
     move!))
 
-(def move! (main))
+(comment
+  (def move! (main)))
