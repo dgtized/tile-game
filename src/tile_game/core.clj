@@ -135,17 +135,16 @@
                          (paint [g]
                                 (dorun (for [x (range dim) y (range dim)]
                                          (render-tile g @*board* [x y])))))
-        move! (fn
-                ([piece]
-                   (dosync (when (can-move? @*board* piece)
-                             (alter *board* move piece)))
-                   (.repaint panel))
-                ([piece & moves]
-                   (prn piece moves)
-                   (move! piece)
-                   (send (agent moves) #(do
-                                         (Thread/sleep 500)
-                                         (apply move! %1)))))]
+        move! (fn ([piece]
+                    (dosync (when (can-move? @*board* piece)
+                              (alter *board* move piece)))
+                    (.repaint panel)))
+        mover! (fn [& moves]
+                (send (agent moves)
+                      (fn [moves]
+                        (doseq [m moves]
+                          (move! m)
+                          (Thread/sleep 500)))))]
     (doto panel
       (.setPreferredSize (Dimension. size size))
       (.setFocusable true)
@@ -159,10 +158,10 @@
                            KeyEvent/VK_UP    (dir-move :up)
                            KeyEvent/VK_DOWN  (dir-move :down)
                            KeyEvent/VK_Q     (.dispose #^JFrame frame)
-                           KeyEvent/VK_S     (apply move! (path-to @*board* [0 0]))
+                           KeyEvent/VK_S     (apply mover! (path-to @*board* [0 0]))
                            true))))))
     (doto frame (.setContentPane panel) .pack .show)
-    move!))
+    mover!))
 
 (comment
   (def move! (main)))
