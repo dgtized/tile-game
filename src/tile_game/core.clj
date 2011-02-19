@@ -70,39 +70,6 @@
 (defn solved? [board]
   (= (concat (range 1 (count board)) '(0)) board))
 
-(defn solver [best-move history board]
-  (if (solved? board)
-    nil
-    (lazy-seq (let [best (best-move history
-                                    board
-                                    (legal-moves board))]
-                (cons best (solver best-move
-                                   (cons best history)
-                                   (move board best)))))))
-
-(defn random-walk [board piece history depth]
-  (take depth (solver (fn [h _ ms]
-                        (rand-nth (remove #(= (first h) %) ms)))
-                      history
-                      (move board piece))))
-
-(defn best-carlo [history board moves]
-  (first (sort-by (fn [m]
-                    (count (random-walk board m history 100)))
-                  (remove #(= (first history) %) moves))))
-
-(def solve (partial solver best-carlo '()))
-
-;; (defn path-to
-;;   [board piece [goal-x goal-y :as goal]]
-;;   (let [[empty-x empty-y :as empty] (coords board 0)
-;;         [x y :as current] (coords board piece)]
-;;     (if (= current goal)
-;;       '()
-;;       (cons (path-to board ))))
-;;   [board goal]
-;;   ())
-
 (defn path-to [board goal]
   (let [current (coords board 0)]
     (if (= current goal)
