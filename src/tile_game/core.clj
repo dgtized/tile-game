@@ -7,6 +7,10 @@
 (set! *warn-on-reflection* true)
 
 (def scale 150)
+(def dir-delta {:up [0 -1]
+                :down [0 1]
+                :left [-1 0]
+                :right [1 0]})
 
 (def colors [Color/RED Color/ORANGE Color/YELLOW Color/GREEN
              Color/BLUE Color/CYAN Color/GRAY Color/PINK])
@@ -35,31 +39,6 @@
         pos (position board piece)]
     [(rem pos dim) (quot pos dim)]))
 
-(defn move [board piece]
-  (let [empty-pos (position board 0)
-        pos (position board piece)]
-    (assoc board
-      empty-pos piece
-      pos 0)))
-
-(def dir-delta {:up [0 -1]
-                :down [0 1]
-                :left [-1 0]
-                :right [1 0]})
-
-(defn slide [board arg]
-  (move board (if (contains? dir-delta arg)
-                (move-direction board arg)
-                arg)))
-
-(defn move-direction [board direction]
-  (let [[x y] (coords board 0)
-        [dx dy] (dir-delta direction)
-        coords [(+ x dx) (+ y dy)]]
-    (if (bounded-coords? board coords)
-      (location board coords)
-      0)))
-
 (defn adjacent-coords [board [x y]]
   (let [adj-loc (map (fn [[dx dy]] [(+ x dx) (+ y dy)])
                      (vals dir-delta))]
@@ -80,6 +59,28 @@
 
 (defn solved? [board]
   (= (concat (range 1 (count board)) '(0)) board))
+
+(defn move [board piece]
+  (let [empty-pos (position board 0)
+        pos (position board piece)]
+    (if (can-move? board piece)
+      (assoc board
+        empty-pos piece
+        pos 0)
+      board)))
+
+(defn move-direction [board direction]
+  (let [[x y] (coords board 0)
+        [dx dy] (dir-delta direction)
+        coords [(+ x dx) (+ y dy)]]
+    (if (bounded-coords? board coords)
+      (location board coords)
+      0)))
+
+(defn slide [board arg]
+  (move board (if (contains? dir-delta arg)
+                (move-direction board arg)
+                arg)))
 
 (defn path-to [board goal]
   (let [current (coords board 0)]
@@ -114,16 +115,17 @@
                                 (dorun (for [x (range dim) y (range dim)]
                                          (render-tile g @*board* [x y])))))
         move! (fn ([piece]
-                    (dosync (when (can-move? @*board* piece)
-                              (alter *board* move piece)))
+                    (dosync (alter *board* move piece))
                     (.repaint panel)))
         mover! (fn [& moves]
                 (send (agent moves)
                       (fn [moves]
                         (doseq [m moves]
                           (move! m)
-                          (Thread/sleep 500)))))]
-    (dosync (ref-set *board* (vec (shuffle (range (* dim dim))))))
+                          (Thread/sleep 300)))))]
+    (dosync (ref-set *board* (vec (concat (range 1 (* dim dim)) '(0))))
+            (when (> dim 2)
+              (alter *board* shuffle)))
     (doto panel
       (.setPreferredSize (Dimension. size size))
       (.setFocusable true)
@@ -143,4 +145,4 @@
     mover!))
 
 (comment
-  (def move! (main 5)))
+  (def move! (main 3)))
