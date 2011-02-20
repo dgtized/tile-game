@@ -114,14 +114,12 @@
                          (paint [g]
                                 (dorun (for [x (range dim) y (range dim)]
                                          (render-tile g @*board* [x y])))))
-        move! (fn ([piece]
-                    (dosync (alter *board* move piece))
-                    (.repaint panel)))
-        mover! (fn [& moves]
+        slide! (fn [& moves]
                 (send (agent moves)
                       (fn [moves]
-                        (doseq [m moves]
-                          (move! m)
+                        (doseq [piece moves]
+                          (dosync (alter *board* slide piece))
+                          (.repaint panel)
                           (Thread/sleep 300)))))]
     (dosync (ref-set *board* (vec (concat (range 1 (* dim dim)) '(0))))
             (when (> dim 2)
@@ -132,17 +130,16 @@
       (.addKeyListener
        (proxy [KeyAdapter] []
          (keyPressed [#^KeyEvent e]
-                     (let [dir-move (comp move! (partial move-direction @*board*))]
-                       (condp = (.getKeyCode e)
-                           KeyEvent/VK_LEFT  (dir-move :left)
-                           KeyEvent/VK_RIGHT (dir-move :right)
-                           KeyEvent/VK_UP    (dir-move :up)
-                           KeyEvent/VK_DOWN  (dir-move :down)
-                           KeyEvent/VK_Q     (.dispose #^JFrame frame)
-                           KeyEvent/VK_S     (apply mover! (path-to @*board* [0 0]))
-                           true))))))
+                     (condp = (.getKeyCode e)
+                         KeyEvent/VK_LEFT  (slide! :left)
+                         KeyEvent/VK_RIGHT (slide! :right)
+                         KeyEvent/VK_UP    (slide! :up)
+                         KeyEvent/VK_DOWN  (slide! :down)
+                         KeyEvent/VK_Q     (.dispose #^JFrame frame)
+                         KeyEvent/VK_S     (apply slide! (path-to @*board* [0 0]))
+                         true)))))
     (doto frame (.setContentPane panel) .pack .show)
-    mover!))
+    slide!))
 
 (comment
-  (def move! (main 3)))
+  (def slide! (main 3)))
