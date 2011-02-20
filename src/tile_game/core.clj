@@ -6,14 +6,17 @@
 
 (set! *warn-on-reflection* true)
 
-(def dim 5)
 (def scale 150)
 
 (def colors [Color/RED Color/ORANGE Color/YELLOW Color/GREEN
              Color/BLUE Color/CYAN Color/GRAY Color/PINK])
 
-(defn bounded-coords? [[x y]]
-  (and (>= x 0) (< x dim) (>= y 0) (< y dim)))
+(defn dimension [board]
+  (int (Math/sqrt (count board))))
+
+(defn bounded-coords? [board [x y]]
+  (let [dim (dimension board)]
+    (and (>= x 0) (< x dim) (>= y 0) (< y dim))))
 
 (defn manhattan [p1 p2]
   (map #(clojure.contrib.math/abs (- %1 %2)) p1 p2))
@@ -22,37 +25,45 @@
   (apply + (manhattan p1 p2)))
 
 (defn location [board [x y]]
-  (nth board (+ (* x dim) y)))
+  (nth board (+ (* y (dimension board)) x)))
 
 (defn position [board piece]
   (first (clojure.contrib.seq/positions #(= piece %) board)))
 
 (defn coords [board piece]
-  (let [pos (position board piece)]
-    [(quot pos dim) (rem pos dim)]))
+  (let [dim (dimension board)
+        pos (position board piece)]
+    [(rem pos dim) (quot pos dim)]))
 
 (defn move [board piece]
   (let [empty-pos (position board 0)
         pos (position board piece)]
-      (assoc board
-        empty-pos piece
-        pos 0)))
+    (assoc board
+      empty-pos piece
+      pos 0)))
 
-(def dir-delta {:up [0 -1] :down [0 1]
-                :left [-1 0] :right [1 0]})
+(def dir-delta {:up [0 -1]
+                :down [0 1]
+                :left [-1 0]
+                :right [1 0]})
+
+(defn slide [board arg]
+  (move board (if (contains? dir-delta arg)
+                (move-direction board arg)
+                arg)))
 
 (defn move-direction [board direction]
   (let [[x y] (coords board 0)
         [dx dy] (dir-delta direction)
         coords [(+ x dx) (+ y dy)]]
-    (if (bounded-coords? coords)
+    (if (bounded-coords? board coords)
       (location board coords)
       0)))
 
 (defn adjacent-coords [board [x y]]
   (let [adj-loc (map (fn [[dx dy]] [(+ x dx) (+ y dy)])
                      (vals dir-delta))]
-    (filter bounded-coords? adj-loc)))
+    (filter (partial bounded-coords? board) adj-loc)))
 
 (defn adjacent-pieces [board piece]
   (map (partial location board)
@@ -93,9 +104,9 @@
                                      (int (+ cx (quot scale 2)))
                                      (int (+ cy (quot scale 2)))))))
 
-(def *board* (ref (shuffle (vec (range (* dim dim))))))
+(def *board* (ref (vec '(0 1 2 3))))
 
-(defn main []
+(defn main [dim]
   (let [size (* dim scale)
         #^JFrame frame (JFrame.)
         #^JPanel panel (proxy [JPanel] []
@@ -112,6 +123,7 @@
                         (doseq [m moves]
                           (move! m)
                           (Thread/sleep 500)))))]
+    (dosync (ref-set *board* (vec (shuffle (range (* dim dim))))))
     (doto panel
       (.setPreferredSize (Dimension. size size))
       (.setFocusable true)
@@ -131,4 +143,4 @@
     mover!))
 
 (comment
-  (def move! (main)))
+  (def move! (main 5)))
