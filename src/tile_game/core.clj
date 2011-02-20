@@ -26,7 +26,7 @@
                                      (int (+ cx (quot scale 2)))
                                      (int (+ cy (quot scale 2)))))))
 
-(def *board* (ref (vec '(0 1 2 3))))
+(def *board* (ref (create-board 2)))
 
 (defn main [dim]
   (let [size (* dim scale)
@@ -42,7 +42,7 @@
                           (dosync (alter *board* slide piece))
                           (.repaint panel)
                           (Thread/sleep 300)))))]
-    (dosync (ref-set *board* (vec (concat (range 1 (* dim dim)) '(0))))
+    (dosync (ref-set *board* (create-board dim))
             (when (> dim 2)
               (alter *board* shuffle)))
     (doto panel

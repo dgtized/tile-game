@@ -3,9 +3,10 @@
   (:use [clojure.test]))
 
 (deftest is-solved
-  (is (solved? '(1 2 3 0)))
-  (is (not (solved? '(0 1 2 3))))
-  (is (not (solved? '(1 3 2 0)))))
+  (is (solved? (create-board 3)))
+  (is (solved? (vec '(1 2 3 0))))
+  (is (not (solved? (vec '(0 1 2 3)))))
+  (is (not (solved? (vec '(1 3 2 0))))))
 
 (def a-board (vec '(1 2 3
                     4 0 5

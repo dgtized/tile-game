@@ -1,6 +1,9 @@
 (ns tile-game.board
   (:require (clojure.contrib seq math)))
 
+(defn create-board [dim]
+  (vec (concat (range 1 (* dim dim)) '(0))))
+
 (def dir-delta {:up [0 -1]
                 :down [0 1]
                 :left [-1 0]
@@ -49,7 +52,7 @@
   (filter #(can-move? board %) board))
 
 (defn solved? [board]
-  (= (concat (range 1 (count board)) '(0)) board))
+  (= (create-board (dimension board)) board))
 
 (defn move [board piece]
   (let [empty-pos (position board 0)
