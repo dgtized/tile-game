@@ -12,7 +12,7 @@
              Color/BLUE Color/CYAN Color/GRAY Color/PINK])
 
 (defn render-tile [#^Graphics g board [x y]]
-  (let [tile (location board [x y])
+  (let [tile (coords->tile board [x y])
         color (if (= tile 0)
                 Color/WHITE
                 (colors (rem tile (count colors))))
