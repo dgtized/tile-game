@@ -24,12 +24,6 @@
                       4 7 5
                       6 0 8)))
 
-(deftest move-tile-direction
-  (is (= (move-tile a-board 7 :up) '(7)))
-  (is (= (move-tile a-board 5 :up) '(2 3 5)))
-  (is (= (move-tile a-board 5 :right) '())))
-
-
 (deftest coordinates
   (are [tile coord]
        (= (tile->coords a-board tile) coord)
@@ -61,7 +55,13 @@
 (deftest calculate-path
   (is (= (path-to a-board-7 [0 0])        '(6 4 1)))
   (is (= (path-to a-board-7 [0 0] #{7})   '(6 4 1)))
-  (is (= (path-to a-board-7 [0 0] #{7 6}) '(8 5 3 2 1))))
+  (is (= (path-to a-board-7 [0 0] #{7 6}) '(8 5 3 2 1)))
+  (is (= (path-to a-board-7 [0 0] #{7 6 5}) '())))
+
+(deftest move-tile-direction
+  (is (= (move-tile a-board 7 :up) '(7)))
+  (is (= (move-tile a-board 5 :up) '(2 3 5)))
+  (is (= (move-tile a-board 5 :right) '())))
 
 ;; (deftest solution-for-tile
 ;;   (is (= (solve-tile a-board 5) '(5))))

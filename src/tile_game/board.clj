@@ -98,14 +98,17 @@
 (defn path-to [board goal & [avoid]]
   (let [dist-map (distance-map board goal
                                (map (partial tile->coords board) avoid))]
-    (loop [path '() board board]
-      (if (= (tile->coords board 0) goal)
-        (reverse path)
-        (let [best-moves (sort-by #(nth dist-map (tile->index board %))
-                                  (legal-moves board))
-              best-move (first best-moves)]
-          (recur (cons best-move path)
-                 (slide board best-move)))))))
+    (if (> (nth dist-map (tile->index board 0)) (* 2 (dimension board)))
+      '()
+      (loop [path '() board board]
+        (if (= (tile->coords board 0) goal)
+          (reverse path)
+          (let [moves (sort-by #(nth dist-map (tile->index board %))
+                               (clojure.set/difference (legal-moves board)
+                                                       avoid))
+                best-move (first moves)]
+            (recur (cons best-move path)
+                   (slide board best-move))))))))
 
 (defn solved-tiles [board]
   (let [solution (create-board (dimension board))]
@@ -116,17 +119,17 @@
   (= (count board) (count (solved-tiles board))))
 
 (defn move-tile [board tile direction & [avoid]]
-  (let [[x y] (tile->coords board tile)
-        goal (coord-add board [x y] (dir-delta direction))]
-    (if (= [x y] goal) '()
+  (let [start (tile->coords board tile)
+        goal (coord-add board start (dir-delta direction))]
+    (if (= start goal) '()
         (concat (path-to board goal (conj (set avoid) tile))
                 (list tile)))))
 
-;; (defn solve-tile [board tile]
-;;   (if ((solved-tiles board) tile)
-;;     '()
-;;     (let [direction :up
-;;           moves (move-tile board tile direction)]
-;;       (concat moves
-;;               (recur (slide board moves) tile)))))
+(defn solve-tile [board tile]
+  (if ((solved-tiles board) tile)
+     '()
+     (let [direction :up
+            moves (move-tile board tile direction)]
+      (concat moves
+              (solve-tile (slide board moves) tile)))))
 
