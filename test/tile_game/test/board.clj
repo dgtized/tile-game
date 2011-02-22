@@ -50,13 +50,22 @@
   (is (= (set '(1 2 3 4)) (solved-tiles a-board))))
 
 (deftest distance-mapper
-  (is (= (distance-map a-board [0 0] #{[1 1]}) [0 1 2 1 9 3 2 3 4])))
+  (is (= (distance-map a-board [0 0] #{0}) [0 1 2 1 9 3 2 3 4])))
 
 (deftest calculate-path
   (is (= (path-to a-board-7 [0 0])        '(6 4 1)))
   (is (= (path-to a-board-7 [0 0] #{7})   '(6 4 1)))
   (is (= (path-to a-board-7 [0 0] #{7 6}) '(8 5 3 2 1)))
   (is (= (path-to a-board-7 [0 0] #{7 6 5}) '())))
+
+(deftest goal-coords
+  (is (= (goal-coord a-board 0) [2 2]))
+  (is (= (goal-coord a-board 1) [0 0])))
+
+(deftest last-tile-on-row
+  (is (last-on-row? a-board (goal-coord a-board 3)))
+  (is (last-on-row? a-board (goal-coord a-board 0)))
+  (is (not (last-on-row? a-board (goal-coord a-board 1)))))
 
 (deftest move-tile-direction
   (is (= (move-tile a-board 7 :up) '(7)))

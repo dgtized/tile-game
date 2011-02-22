@@ -92,13 +92,15 @@
 (defn distance-map [board goal avoid]
   (dijkstra-map (vec (repeat (count board) (count board)))
                 (set (list goal))
-                (set avoid)
+                (set (map (partial tile->coords board) avoid))
                 0))
 
+(defn impassable? [board dist-map tile]
+  (> (nth dist-map (tile->index board tile)) (* 2 (dimension board))))
+
 (defn path-to [board goal & [avoid]]
-  (let [dist-map (distance-map board goal
-                               (map (partial tile->coords board) avoid))]
-    (if (> (nth dist-map (tile->index board 0)) (* 2 (dimension board)))
+  (let [dist-map (distance-map board goal avoid)]
+    (if (impassable? board dist-map 0)
       '()
       (loop [path '() board board]
         (if (= (tile->coords board 0) goal)
@@ -125,11 +127,29 @@
         (concat (path-to board goal (conj (set avoid) tile))
                 (list tile)))))
 
+(defn goal-coord [board tile]
+  (index->coords board (- (if (= tile 0)
+                            (count board)
+                            tile) 1)))
+
+(defn last-on-row? [board [x y]]
+  (= x (- (dimension board) 1)))
+
+(defn move-tile-to [board tile goal & [avoid]]
+  (let [dist-map (distance-map board goal avoid)]
+    (if (impassable? board dist-map tile)
+      '()
+      'foo)))
+
 (defn solve-tile [board tile]
-  (if ((solved-tiles board) tile)
-     '()
-     (let [direction :up
-            moves (move-tile board tile direction)]
-      (concat moves
-              (solve-tile (slide board moves) tile)))))
+  (let [solved (solved-tiles board)
+        goal (goal-coord board tile)]
+    (if (solved tile)
+      '()
+      (if (last-on-row? board goal)
+        (concat (solve-tile ))
+        (let [direction :up
+              moves (move-tile board tile direction)]
+          (concat moves
+                  (solve-tile (slide board moves) tile)))))))
 
