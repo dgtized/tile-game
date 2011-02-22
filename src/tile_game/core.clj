@@ -42,9 +42,7 @@
                           (dosync (alter *board* slide piece))
                           (.repaint panel)
                           (Thread/sleep 300)))))]
-    (dosync (ref-set *board* (create-board dim))
-            (when (> dim 2)
-              (alter *board* shuffle)))
+    (dosync (ref-set *board* (create-board dim :shuffle)))
     (doto panel
       (.setPreferredSize (Dimension. size size))
       (.setFocusable true)

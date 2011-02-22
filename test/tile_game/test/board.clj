@@ -43,3 +43,19 @@
        4      a-board-4
        7      a-board-7
        ))
+
+(deftest solved-to
+  (is (= (set '(1 2 3 0)) (solved-tiles (create-board 2))))
+  (is (= (set '(1 2 3 4)) (solved-tiles a-board-7)))
+  (is (= (set '(1 2 3 4)) (solved-tiles a-board))))
+
+(deftest distance-mapper
+  (is (= (distance-map a-board [0 0] #{[1 1]}) [0 1 2 1 9 3 2 3 4])))
+
+(deftest calculate-path
+  (is (= (path-to a-board-7 [0 0])        '(6 4 1)))
+  (is (= (path-to a-board-7 [0 0] #{7})   '(6 4 1)))
+  (is (= (path-to a-board-7 [0 0] #{7 6}) '(8 5 3 2 1))))
+
+;; (deftest solution-for-tile
+;;   (is (= (solve-tile a-board 5) '(5))))
