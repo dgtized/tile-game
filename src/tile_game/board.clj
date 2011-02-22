@@ -56,9 +56,8 @@
 (defn- legal-moves [board]
   (set (filter #(adjacent? board 0 %) board)))
 
-(defn- coord-direction [board [x y] direction]
-  (let [[dx dy] (dir-delta direction)
-        coords [(+ x dx) (+ y dy)]]
+(defn- coord-add [board [x y] [dx dy]]
+  (let [coords [(+ x dx) (+ y dy)]]
     (if (bounded-coords? board coords)
       coords
       [x y])))
@@ -66,8 +65,9 @@
 (defn slide [board arg]
   (let [tile (if (contains? dir-delta arg)
                (coords->tile board
-                             (coord-direction board
-                                              (tile->coords board 0) arg))
+                             (coord-add board
+                                        (tile->coords board 0)
+                                        (dir-delta arg)))
                arg)
         empty-pos (tile->index board 0)
         pos (tile->index board tile)]
@@ -90,15 +90,14 @@
              (+ cost 1)))))
 
 (defn distance-map [board goal avoid]
-  (prn board goal avoid)
   (dijkstra-map (vec (repeat (count board) (count board)))
                 (set (list goal))
                 (set avoid)
                 0))
 
-(defn path-to [board goal & avoid]
+(defn path-to [board goal & [avoid]]
   (let [dist-map (distance-map board goal
-                               (map (partial tile->coords board) (first avoid)))]
+                               (map (partial tile->coords board) avoid))]
     (loop [path '() board board]
       (if (= (tile->coords board 0) goal)
         (reverse path)
@@ -116,10 +115,12 @@
 (defn solved? [board]
   (= (count board) (count (solved-tiles board))))
 
-(defn move-tile [board tile direction]
+(defn move-tile [board tile direction & [avoid]]
   (let [[x y] (tile->coords board tile)
-        goal (coord-direction [x y] direction)]
-    goal))
+        goal (coord-add board [x y] (dir-delta direction))]
+    (if (= [x y] goal) '()
+        (concat (path-to board goal (conj (set avoid) tile))
+                (list tile)))))
 
 ;; (defn solve-tile [board tile]
 ;;   (if ((solved-tiles board) tile)

@@ -36,6 +36,7 @@
                                 (dorun (for [x (range dim) y (range dim)]
                                          (render-tile g @*board* [x y])))))
         slide! (fn [& moves]
+                 (prn :slide! moves)
                 (send (agent moves)
                       (fn [moves]
                         (doseq [piece moves]
@@ -56,6 +57,8 @@
                          KeyEvent/VK_DOWN  (slide! :down)
                          KeyEvent/VK_Q     (.dispose #^JFrame frame)
                          KeyEvent/VK_S     (apply slide! (path-to @*board* [0 0]))
+                         KeyEvent/VK_M     (apply slide!
+                                                  (move-tile @*board* 5 :up))
                          true)))))
     (doto frame (.setContentPane panel) .pack .show)
     slide!))
