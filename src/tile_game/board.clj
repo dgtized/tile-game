@@ -98,12 +98,15 @@
 (defn impassable? [board dist-map tile]
   (> (nth dist-map (tile->index board tile)) (* 2 (dimension board))))
 
+(defn tile-at-coord? [board tile coord]
+  (= (tile->coords board tile) coord))
+
 (defn path-to [board goal & [avoid]]
   (let [dist-map (distance-map board goal avoid)]
     (if (impassable? board dist-map 0)
       '()
       (loop [path '() board board]
-        (if (= (tile->coords board 0) goal)
+        (if (tile-at-coord? board 0 goal)
           (reverse path)
           (let [moves (sort-by #(nth dist-map (tile->index board %))
                                (clojure.set/difference (legal-moves board)
@@ -139,7 +142,13 @@
   (let [dist-map (distance-map board goal avoid)]
     (if (impassable? board dist-map tile)
       '()
-      'foo)))
+      (loop [path '() board board]
+        (if (tile-at-coord? board tile goal)
+          (reverse path)
+          (let [direction :up
+                moves (move-tile board tile direction avoid)]
+            (recur (cons direction path)
+                   (reduce slide board moves))))))))
 
 (defn solve-tile [board tile]
   (let [solved (solved-tiles board)
