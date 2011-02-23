@@ -56,9 +56,9 @@
                          KeyEvent/VK_UP    (slide! :up)
                          KeyEvent/VK_DOWN  (slide! :down)
                          KeyEvent/VK_Q     (.dispose #^JFrame frame)
-                         KeyEvent/VK_S     (apply slide! (path-to @*board* [0 0]))
+                         KeyEvent/VK_S     (apply slide! (move-to @*board* 0 [0 0]))
                          KeyEvent/VK_M     (apply slide!
-                                                  (move-tile-to @*board* 5 [0 0]))
+                                                  (move-to @*board* 5 [0 0]))
                          true)))))
     (doto frame (.setContentPane panel) .pack .show)
     slide!))

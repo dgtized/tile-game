@@ -53,25 +53,25 @@
   (is (= (distance-map a-board [0 0] #{0}) [0 1 2 1 9 3 2 3 4])))
 
 (deftest calculate-path
-  (is (= (path-to a-board-7 [0 0])        '(6 4 1)))
-  (is (= (path-to a-board-7 [0 0] #{7})   '(6 4 1)))
-  (is (= (path-to a-board-7 [0 0] #{7 6}) '(8 5 3 2 1)))
-  (is (= (path-to a-board-7 [0 0] #{7 6 5}) '())))
+  (is (= (move-to a-board-7 0 [0 0])        '(6 4 1)))
+  (is (= (move-to a-board-7 0 [0 0] #{7})   '(6 4 1)))
+  (is (= (move-to a-board-7 0 [0 0] #{7 6}) '(8 5 3 2 1)))
+  (is (= (move-to a-board-7 0 [0 0] #{7 6 5}) '())))
 
 (deftest move-a-tile-once
-  (is (= (move-tile a-board 7 [1 1]) '(7)))
-  (is (= (move-tile a-board 5 [2 0]) '(2 3 5)))
-  (is (= (move-tile a-board 5 [2 1]) '())))
+  (is (= (move-to a-board 7 [1 1]) '(7)))
+  (is (= (move-to a-board 5 [2 0]) '(2 3 5)))
+  (is (= (move-to a-board 5 [2 1]) '())))
 
-(deftest move-a-tile
-  (is (= (move-tile-to a-board 5 [2 1]) '()))
-  (is (= (move-tile-to a-board 0 [1 1]) '()))
-  (is (= (move-tile-to a-board 0 [1 0]) '(2)))
-  (is (= (move-tile-to a-board 5 [2 0]) '(2 3 5))))
+(deftest move-a-tile-multi
+  (is (= (move-to a-board 5 [2 1]) '()))
+  (is (= (move-to a-board 0 [1 1]) '()))
+  (is (= (move-to a-board 0 [1 0]) '(2)))
+  (is (= (move-to a-board 5 [2 0]) '(2 3 5))))
 
 (deftest move-a-tile-to-location
   (are [tile coord]
-       (tile-at-coord? (reduce slide a-board (move-tile-to a-board tile coord))
+       (tile-at-coord? (reduce slide a-board (move-to a-board tile coord))
                        tile coord)
        5 [0 0]
        5 [1 1]
