@@ -110,13 +110,13 @@
       (if (tile-at-coord? board tile goal)
         path
         (when-let [best-move (first (ranked-moves board dist-map tile avoid))]
-          (let [moves (if (= tile 0)
-                        (list best-move)
-                        (let [zero-path
-                              (move-to board 0
-                                       (tile->coords board best-move)
-                                       (conj (set avoid) tile))]
-                          (concat zero-path (list tile))))]
+          (when-let [moves (if (= tile 0)
+                             (list best-move)
+                             (when-let [zero-path
+                                        (move-to board 0
+                                                 (tile->coords board best-move)
+                                                 (conj (set avoid) tile))]
+                               (concat zero-path (list tile))))]
             (recur (concat path moves)
                    (reduce slide board moves))))))))
 

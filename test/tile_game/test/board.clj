@@ -64,7 +64,10 @@
   (is (= (move-to a-board 5 [2 1]) '()))
   (is (= (move-to a-board 0 [1 1]) '()))
   (is (= (move-to a-board 0 [1 0]) '(2)))
-  (is (= (move-to a-board 5 [2 0]) '(2 3 5))))
+  (is (= (move-to a-board 5 [2 0]) '(2 3 5)))
+
+  (is (= (move-to [1 2 3 6 5 7 0 4 14 13 9 12 15 8 10 11] 4 [3 0] #{1 2 3}) nil))
+  )
 
 (deftest move-a-tile-to-location
   (are [tile coord]
