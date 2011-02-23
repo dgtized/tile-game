@@ -99,26 +99,26 @@
   (= (tile->coords board tile) coord))
 
 (defn ranked-moves [board dist-map tile avoid]
-  (let [moves (clojure.set/difference (set (adjacent-tiles board tile)) avoid)]
-    (sort-by #(nth dist-map (tile->index board %)) moves)))
+  (if (impassable? board dist-map tile)
+    nil
+    (let [moves (clojure.set/difference (set (adjacent-tiles board tile)) avoid)]
+      (sort-by #(nth dist-map (tile->index board %)) moves))))
 
 (defn move-to [board tile goal & [avoid]]
   (let [dist-map (distance-map board goal avoid)]
-    (if (impassable? board dist-map tile)
-      '()
-      (loop [path '() board board]
-        (if (tile-at-coord? board tile goal)
-          path
-          (let [best-move (first (ranked-moves board dist-map tile avoid))
-                moves (if (= tile 0)
+    (loop [path '() board board]
+      (if (tile-at-coord? board tile goal)
+        path
+        (when-let [best-move (first (ranked-moves board dist-map tile avoid))]
+          (let [moves (if (= tile 0)
                         (list best-move)
-                        (let [path (move-to board 0 (tile->coords board best-move)
-                                            (conj (set avoid) tile))]
-                          (concat path (list tile))))]
-            (if (empty? moves)
-              '()
-              (recur (concat path moves)
-                     (reduce slide board moves)))))))))
+                        (let [zero-path
+                              (move-to board 0
+                                       (tile->coords board best-move)
+                                       (conj (set avoid) tile))]
+                          (concat zero-path (list tile))))]
+            (recur (concat path moves)
+                   (reduce slide board moves))))))))
 
 (defn solved-tiles [board]
   (let [solution (create-board (dimension board))]
