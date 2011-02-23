@@ -110,10 +110,10 @@
           (reverse path)
           (let [moves (sort-by #(nth dist-map (tile->index board %))
                                (clojure.set/difference (legal-moves board)
-                                                       avoid))
-                best-move (first moves)]
-            (recur (cons best-move path)
-                   (slide board best-move))))))))
+                                                       avoid))]
+            (if (empty? moves) '()
+                (recur (cons (first moves) path)
+                       (slide board (first moves))))))))))
 
 (defn solved-tiles [board]
   (let [solution (create-board (dimension board))]
@@ -145,11 +145,16 @@
       '()
       (loop [path '() board board]
         (if (tile-at-coord? board tile goal)
-          (reverse path)
-          (let [direction :up
-                moves (move-tile board tile direction avoid)]
-            (recur (cons direction path)
-                   (reduce slide board moves))))))))
+          path
+          (let [best-move (first (sort-by #(nth dist-map (tile->index board %))
+                                          (clojure.set/difference
+                                           (set (adjacent-tiles board tile))
+                                           avoid)))
+                moves (move-tile board tile (tile->coords board best-move) avoid)]
+            (if (empty? moves)
+              '()
+              (recur (concat moves path)
+                     (reduce slide board moves)))))))))
 
 (defn solve-tile [board tile]
   (let [solved (solved-tiles board)
@@ -161,5 +166,5 @@
         (let [direction :up
               moves (move-tile board tile direction)]
           (concat moves
-                  (solve-tile (slide board moves) tile)))))))
+                  (solve-tile (reduce slide board moves) tile)))))))
 
