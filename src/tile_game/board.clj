@@ -136,15 +136,34 @@
 (defn last-on-row? [board [x y]]
   (= x (- (dimension board) 1)))
 
+(defn move-sequence [board [tile goal solved] & more]
+  (let [path (move-to board tile goal solved)]
+    (if (nil? more)
+      path
+      (concat path
+              (apply move-sequence (reduce slide board path) more)))))
+
 (defn solve-tile [board tile]
   (let [solved (solved-tiles board)
         goal (goal-coord board tile)]
-    (if (solved tile)
+    (if ((set solved) tile)
       '()
       (if (last-on-row? board goal)
-        (concat (solve-tile ))
-        (let [direction :up
-              moves (move-tile board tile direction)]
-          (concat moves
-                  (solve-tile (reduce slide board moves) tile)))))))
+        (let [[x y] goal]
+          (move-sequence board
+                         [tile [x (+ y 1)] solved]
+                         [1 [0 1] #{2 3 4}]
+                         [0 [0 0] #{}]
+                         [2 [0 0] #{1 3}]
+                         [3 [1 0] #{1 2}]
+                         [4 [3 0] #{1 2 3}]
+                         [0 [2 0] #{1 2 3 4}]
+                         ))
+        (move-to board tile goal solved)))))
+
+(defn solve-next [board]
+  (if-not (solved? board)
+    (let [next (+ 1 (count (solved-tiles board)))]
+      (prn :solve-next next)
+      (solve-tile board next))))
 

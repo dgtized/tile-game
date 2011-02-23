@@ -42,7 +42,7 @@
                          (doseq [piece moves]
                            (dosync (alter *board* slide piece))
                            (.repaint panel)
-                           (Thread/sleep 300)))))]
+                           (Thread/sleep 200)))))]
     (dosync (ref-set *board* (create-board dim :shuffle)))
     (doto panel
       (.setPreferredSize (Dimension. size size))
@@ -56,9 +56,7 @@
                          KeyEvent/VK_UP    (slide! :up)
                          KeyEvent/VK_DOWN  (slide! :down)
                          KeyEvent/VK_Q     (.dispose #^JFrame frame)
-                         KeyEvent/VK_S     (apply slide! (move-to @*board* 0 [0 0]))
-                         KeyEvent/VK_M     (apply slide!
-                                                  (move-to @*board* 5 [0 0]))
+                         KeyEvent/VK_S     (apply slide! (solve-next @*board*))
                          true)))))
     (doto frame (.setContentPane panel) .pack .show)
     slide!))
