@@ -102,28 +102,6 @@
   (let [moves (clojure.set/difference (set (adjacent-tiles board tile)) avoid)]
     (sort-by #(nth dist-map (tile->index board %)) moves)))
 
-(defn path-to [board tile goal & [avoid]]
-  (let [dist-map (distance-map board goal avoid)]
-    (if (impassable? board dist-map tile)
-      '()
-      (loop [path '() board board]
-        (if (tile-at-coord? board tile goal)
-          path
-          (let [best-move (first (ranked-moves board dist-map tile avoid))]
-            (if (nil? best-move) '()
-                (recur (concat path (list best-move))
-                       (slide board best-move)))))))))
-
-(defn move-tile [board tile goal & [avoid]]
-  (if (tile-at-coord? board tile goal)
-    '()
-    (if (= tile 0)
-      (path-to board 0 goal avoid)
-      (let [path (move-to board 0 goal (conj (set avoid) tile))]
-        (if (and (empty? path) (not (tile-at-coord? board 0 goal)))
-          '()
-          (concat path (list tile)))))))
-
 (defn move-to [board tile goal & [avoid]]
   (let [dist-map (distance-map board goal avoid)]
     (if (impassable? board dist-map tile)
@@ -132,7 +110,11 @@
         (if (tile-at-coord? board tile goal)
           path
           (let [best-move (first (ranked-moves board dist-map tile avoid))
-                moves (move-tile board tile (tile->coords board best-move) avoid)]
+                moves (if (= tile 0)
+                        (list best-move)
+                        (let [path (move-to board 0 (tile->coords board best-move)
+                                            (conj (set avoid) tile))]
+                          (concat path (list tile))))]
             (if (empty? moves)
               '()
               (recur (concat path moves)
