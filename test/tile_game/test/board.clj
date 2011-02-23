@@ -63,12 +63,19 @@
   (is (= (move-tile a-board 5 [2 0]) '(2 3 5)))
   (is (= (move-tile a-board 5 [2 1]) '())))
 
-(deftest move-a-tile-to-location
+(deftest move-a-tile
   (is (= (move-tile-to a-board 5 [2 1]) '()))
   (is (= (move-tile-to a-board 0 [1 1]) '()))
-  (is (= (move-tile-to a-board 0 [1 0]) '(3)))
-  (is (= (move-tile-to a-board 5 [2 0]) '(2 3 5)))
-  (is (= (move-tile-to a-board 5 [0 0]) '(2 3 4 1 5 2 3 5 2 3 5))))
+  (is (= (move-tile-to a-board 0 [1 0]) '(2)))
+  (is (= (move-tile-to a-board 5 [2 0]) '(2 3 5))))
+
+(deftest move-a-tile-to-location
+  (are [tile coord]
+       (tile-at-coord? (reduce slide a-board (move-tile-to a-board tile coord))
+                       tile coord)
+       5 [0 0]
+       5 [1 1]
+       0 [0 0]))
 
 (deftest goal-coords
   (is (= (goal-coord a-board 0) [2 2]))

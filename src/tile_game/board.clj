@@ -108,19 +108,21 @@
       '()
       (loop [path '() board board]
         (if (tile-at-coord? board 0 goal)
-          (reverse path)
+          path
           (let [best-move (first (ranked-moves board dist-map 0 avoid))]
             (if (nil? best-move) '()
-                (recur (cons best-move path)
+                (recur (concat path (list best-move))
                        (slide board best-move)))))))))
 
 (defn move-tile [board tile goal & [avoid]]
   (if (tile-at-coord? board tile goal)
     '()
-    (let [path (path-to board goal (conj (set avoid) tile))]
-      (if (and (empty? path) (not (tile-at-coord? board 0 goal)))
-        '()
-        (concat path (list tile))))))
+    (if (= tile 0)
+      (path-to board goal avoid)
+      (let [path (path-to board goal (conj (set avoid) tile))]
+        (if (and (empty? path) (not (tile-at-coord? board 0 goal)))
+          '()
+          (concat path (list tile)))))))
 
 (defn move-tile-to [board tile goal & [avoid]]
   (let [dist-map (distance-map board goal avoid)]
@@ -133,7 +135,7 @@
                 moves (move-tile board tile (tile->coords board best-move) avoid)]
             (if (empty? moves)
               '()
-              (recur (concat moves path)
+              (recur (concat path moves)
                      (reduce slide board moves)))))))))
 
 (defn solved-tiles [board]
