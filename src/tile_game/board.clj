@@ -119,7 +119,7 @@
     '()
     (if (= tile 0)
       (path-to board 0 goal avoid)
-      (let [path (path-to board 0 goal (conj (set avoid) tile))]
+      (let [path (move-to board 0 goal (conj (set avoid) tile))]
         (if (and (empty? path) (not (tile-at-coord? board 0 goal)))
           '()
           (concat path (list tile)))))))
