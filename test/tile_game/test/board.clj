@@ -58,15 +58,6 @@
   (is (= (path-to a-board-7 [0 0] #{7 6}) '(8 5 3 2 1)))
   (is (= (path-to a-board-7 [0 0] #{7 6 5}) '())))
 
-(deftest goal-coords
-  (is (= (goal-coord a-board 0) [2 2]))
-  (is (= (goal-coord a-board 1) [0 0])))
-
-(deftest last-tile-on-row
-  (is (last-on-row? a-board (goal-coord a-board 3)))
-  (is (last-on-row? a-board (goal-coord a-board 0)))
-  (is (not (last-on-row? a-board (goal-coord a-board 1)))))
-
 (deftest move-a-tile-once
   (is (= (move-tile a-board 7 [1 1]) '(7)))
   (is (= (move-tile a-board 5 [2 0]) '(2 3 5)))
@@ -78,6 +69,15 @@
   (is (= (move-tile-to a-board 0 [1 0]) '(3)))
   (is (= (move-tile-to a-board 5 [2 0]) '(2 3 5)))
   (is (= (move-tile-to a-board 5 [0 0]) '(2 3 4 1 5 2 3 5 2 3 5))))
+
+(deftest goal-coords
+  (is (= (goal-coord a-board 0) [2 2]))
+  (is (= (goal-coord a-board 1) [0 0])))
+
+(deftest last-tile-on-row
+  (is (last-on-row? a-board (goal-coord a-board 3)))
+  (is (last-on-row? a-board (goal-coord a-board 0)))
+  (is (not (last-on-row? a-board (goal-coord a-board 1)))))
 
 ;; (deftest solution-for-tile
 ;;   (is (= (solve-tile a-board 5) '(5))))

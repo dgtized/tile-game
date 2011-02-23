@@ -115,14 +115,6 @@
                 (recur (cons (first moves) path)
                        (slide board (first moves))))))))))
 
-(defn solved-tiles [board]
-  (let [solution (create-board (dimension board))]
-    (set (keep-indexed (fn [idx tile] (if (= tile (nth solution idx)) tile nil))
-                       board))))
-
-(defn solved? [board]
-  (= (count board) (count (solved-tiles board))))
-
 (defn move-tile [board tile goal & [avoid]]
   (if (tile-at-coord? board tile goal)
     '()
@@ -130,14 +122,6 @@
       (if (and (empty? path) (not (tile-at-coord? board 0 goal)))
         '()
         (concat path (list tile))))))
-
-(defn goal-coord [board tile]
-  (index->coords board (- (if (= tile 0)
-                            (count board)
-                            tile) 1)))
-
-(defn last-on-row? [board [x y]]
-  (= x (- (dimension board) 1)))
 
 (defn move-tile-to [board tile goal & [avoid]]
   (let [dist-map (distance-map board goal avoid)]
@@ -155,6 +139,22 @@
               '()
               (recur (concat moves path)
                      (reduce slide board moves)))))))))
+
+(defn solved-tiles [board]
+  (let [solution (create-board (dimension board))]
+    (set (keep-indexed (fn [idx tile] (if (= tile (nth solution idx)) tile nil))
+                       board))))
+
+(defn solved? [board]
+  (= (count board) (count (solved-tiles board))))
+
+(defn goal-coord [board tile]
+  (index->coords board (- (if (= tile 0)
+                            (count board)
+                            tile) 1)))
+
+(defn last-on-row? [board [x y]]
+  (= x (- (dimension board) 1)))
 
 (defn solve-tile [board tile]
   (let [solved (solved-tiles board)
