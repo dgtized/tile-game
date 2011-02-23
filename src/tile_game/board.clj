@@ -75,7 +75,7 @@
       board)))
 
 (defn dijkstra-map [dmap coords seen cost]
-  (if (empty? coords)
+  (if (empty? (clojure.set/difference coords seen))
     dmap
     (let [costs (flatten (map #(list (coords->index dmap %) cost) coords))
           edges (reduce clojure.set/union #{}
@@ -83,7 +83,7 @@
           next (clojure.set/difference edges seen)]
       (recur (apply assoc dmap costs)
              next
-             (clojure.set/union seen coords next)
+             (clojure.set/union seen coords)
              (+ cost 1)))))
 
 (defn distance-map [board goal avoid]

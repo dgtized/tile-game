@@ -50,7 +50,8 @@
   (is (= (set '(1 2 3 4)) (solved-tiles a-board))))
 
 (deftest distance-mapper
-  (is (= (distance-map a-board [0 0] #{0}) [0 1 2 1 9 3 2 3 4])))
+  (is (= (distance-map a-board [0 0] #{0}) [0 1 2 1 9 3 2 3 4]))
+  (is (= (distance-map a-board [0 0] #{1}) [9 9 9 9 9 9 9 9 9])))
 
 (deftest calculate-path
   (is (= (move-to a-board-7 0 [0 0])        '(6 4 1)))
