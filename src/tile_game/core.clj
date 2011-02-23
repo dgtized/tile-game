@@ -37,12 +37,12 @@
                                          (render-tile g @*board* [x y])))))
         slide! (fn [& moves]
                  (prn :slide! moves)
-                (send (agent moves)
-                      (fn [moves]
-                        (doseq [piece moves]
-                          (dosync (alter *board* slide piece))
-                          (.repaint panel)
-                          (Thread/sleep 300)))))]
+                 (send (agent moves)
+                       (fn [moves]
+                         (doseq [piece moves]
+                           (dosync (alter *board* slide piece))
+                           (.repaint panel)
+                           (Thread/sleep 300)))))]
     (dosync (ref-set *board* (create-board dim :shuffle)))
     (doto panel
       (.setPreferredSize (Dimension. size size))
@@ -58,10 +58,7 @@
                          KeyEvent/VK_Q     (.dispose #^JFrame frame)
                          KeyEvent/VK_S     (apply slide! (path-to @*board* [0 0]))
                          KeyEvent/VK_M     (apply slide!
-                                                  (move-tile @*board* 5
-                                                             (coord-add @*board*
-                                                                        (tile->coords @*board* 5)
-                                                                        (dir-delta :up))))
+                                                  (move-tile-to @*board* 5 [0 0]))
                          true)))))
     (doto frame (.setContentPane panel) .pack .show)
     slide!))
