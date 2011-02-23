@@ -122,8 +122,8 @@
 
 (defn solved-tiles [board]
   (let [solution (create-board (dimension board))]
-    (set (keep-indexed (fn [idx tile] (if (= tile (nth solution idx)) tile nil))
-                       board))))
+    (take-while #(not (nil? %))
+                (map #(if (= %1 %2) %1 nil) board solution))))
 
 (defn solved? [board]
   (= (count board) (count (solved-tiles board))))

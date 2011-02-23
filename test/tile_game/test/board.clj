@@ -44,11 +44,6 @@
        7      a-board-7
        ))
 
-(deftest solved-to
-  (is (= (set '(1 2 3 0)) (solved-tiles (create-board 2))))
-  (is (= (set '(1 2 3 4)) (solved-tiles a-board-7)))
-  (is (= (set '(1 2 3 4)) (solved-tiles a-board))))
-
 (deftest distance-mapper
   (is (= (distance-map a-board [0 0] #{0}) [0 1 2 1 9 3 2 3 4]))
   (is (= (distance-map a-board [0 0] #{1}) [9 9 9 9 9 9 9 9 9])))
@@ -78,6 +73,13 @@
        5 [0 0]
        5 [1 1]
        0 [0 0]))
+
+(deftest solved-to
+  (is (= '(1 2 3 0) (solved-tiles (create-board 2))))
+  (is (= '(1 2 3 4 5 6 7 8 0) (solved-tiles (create-board 3))))
+  (is (= '(1 2 3 4) (solved-tiles a-board-7)))
+  (is (= '(1 2 3 4) (solved-tiles a-board)))
+  (is (= '(1 2) (solved-tiles [1 2 14 8 6 0 13 3 12 9 11 10 5 15 7 4]))))
 
 (deftest goal-coords
   (is (= (goal-coord a-board 0) [2 2]))
