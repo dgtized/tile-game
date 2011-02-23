@@ -67,10 +67,10 @@
   (is (last-on-row? a-board (goal-coord a-board 0)))
   (is (not (last-on-row? a-board (goal-coord a-board 1)))))
 
-(deftest move-tile-direction
-  (is (= (move-tile a-board 7 :up) '(7)))
-  (is (= (move-tile a-board 5 :up) '(2 3 5)))
-  (is (= (move-tile a-board 5 :right) '())))
+(deftest move-a-tile-to
+  (is (= (move-tile a-board 7 [1 1]) '(7)))
+  (is (= (move-tile a-board 5 [2 0]) '(2 3 5)))
+  (is (= (move-tile a-board 5 [2 1]) '())))
 
 ;; (deftest solution-for-tile
 ;;   (is (= (solve-tile a-board 5) '(5))))

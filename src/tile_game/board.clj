@@ -56,7 +56,7 @@
 (defn- legal-moves [board]
   (set (filter #(adjacent? board 0 %) board)))
 
-(defn- coord-add [board [x y] [dx dy]]
+(defn coord-add [board [x y] [dx dy]]
   (let [coords [(+ x dx) (+ y dy)]]
     (if (bounded-coords? board coords)
       coords
@@ -123,12 +123,13 @@
 (defn solved? [board]
   (= (count board) (count (solved-tiles board))))
 
-(defn move-tile [board tile direction & [avoid]]
-  (let [start (tile->coords board tile)
-        goal (coord-add board start (dir-delta direction))]
-    (if (= start goal) '()
-        (concat (path-to board goal (conj (set avoid) tile))
-                (list tile)))))
+(defn move-tile [board tile goal & [avoid]]
+  (if (tile-at-coord? board tile goal)
+    '()
+    (let [path (path-to board goal (conj (set avoid) tile))]
+      (if (and (empty? path) (not (tile-at-coord? board 0 goal)))
+        '()
+        (concat path (list tile))))))
 
 (defn goal-coord [board tile]
   (index->coords board (- (if (= tile 0)
