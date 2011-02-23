@@ -53,9 +53,6 @@
 (defn- adjacent? [board p1 p2]
   (= 1 (distance (tile->coords board p1) (tile->coords board p2))))
 
-(defn- legal-moves [board]
-  (set (filter #(adjacent? board 0 %) board)))
-
 (defn coord-add [board [x y] [dx dy]]
   (let [coords [(+ x dx) (+ y dy)]]
     (if (bounded-coords? board coords)
@@ -101,6 +98,10 @@
 (defn tile-at-coord? [board tile coord]
   (= (tile->coords board tile) coord))
 
+(defn ranked-moves [board dist-map tile avoid]
+  (let [moves (clojure.set/difference (set (adjacent-tiles board tile)) avoid)]
+    (sort-by #(nth dist-map (tile->index board %)) moves)))
+
 (defn path-to [board goal & [avoid]]
   (let [dist-map (distance-map board goal avoid)]
     (if (impassable? board dist-map 0)
@@ -108,12 +109,10 @@
       (loop [path '() board board]
         (if (tile-at-coord? board 0 goal)
           (reverse path)
-          (let [moves (sort-by #(nth dist-map (tile->index board %))
-                               (clojure.set/difference (legal-moves board)
-                                                       avoid))]
-            (if (empty? moves) '()
-                (recur (cons (first moves) path)
-                       (slide board (first moves))))))))))
+          (let [best-move (first (ranked-moves board dist-map 0 avoid))]
+            (if (nil? best-move) '()
+                (recur (cons best-move path)
+                       (slide board best-move)))))))))
 
 (defn move-tile [board tile goal & [avoid]]
   (if (tile-at-coord? board tile goal)
@@ -130,10 +129,7 @@
       (loop [path '() board board]
         (if (tile-at-coord? board tile goal)
           path
-          (let [best-move (first (sort-by #(nth dist-map (tile->index board %))
-                                          (clojure.set/difference
-                                           (set (adjacent-tiles board tile))
-                                           avoid)))
+          (let [best-move (first (ranked-moves board dist-map tile avoid))
                 moves (move-tile board tile (tile->coords board best-move) avoid)]
             (if (empty? moves)
               '()
