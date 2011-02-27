@@ -162,6 +162,5 @@
 (defn solve-next [board]
   (if-not (solved? board)
     (let [next (+ 1 (count (solved-tiles board)))]
-      (prn :solve-next next)
       (solve-tile board next))))
 
