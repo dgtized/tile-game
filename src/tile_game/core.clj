@@ -28,7 +28,7 @@
 
 (def *board* (ref (create-board 2)))
 
-(defn main [dim]
+(defn start-gui [dim]
   (let [size (* dim scale)
         #^JFrame frame (JFrame.)
         #^JPanel panel (proxy [JPanel] []
@@ -64,4 +64,10 @@
     (doto frame (.setContentPane panel) .pack .show)
     slide!))
 
-(def slide! (main 5))
+(defn -main [& [num]]
+  (if num (start-gui (Integer/parseInt num))
+      (start-gui 4))
+  nil)
+
+;(def slide! (main 5))
+
