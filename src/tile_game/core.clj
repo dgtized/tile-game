@@ -42,7 +42,7 @@
                          (doseq [piece moves]
                            (dosync (alter *board* slide piece))
                            (.repaint panel)
-                           (Thread/sleep 200)))))]
+                           (Thread/sleep 150)))))]
     (dosync (ref-set *board* (create-board dim :shuffle)))
     (doto panel
       (.setPreferredSize (Dimension. size size))
@@ -61,4 +61,4 @@
     (doto frame (.setContentPane panel) .pack .show)
     slide!))
 
-(def slide! (main 4))
+(def slide! (main 3))
