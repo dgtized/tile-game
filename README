@@ -20,8 +20,16 @@ lein run [dim]
 *S* will execute solve-next which is a heuristic based solver
   which does not actually complete.
 
+## Note/Disclaimer
+
+The solver is unfinished, I got caught up in other projects before
+completing it. It will solve a portion of the problem with a
+heuristic, but will not search for a general solution. This was also
+my first experience with the language, so it's definitely not
+idiomatic Clojure.
+
 ## License
 
-Copyright (C) 2011 Charles Comstock
+Copyright (C) 2011-2012 Charles L.G. Comstock
 
 Distributed under the Eclipse Public License, the same as Clojure.
