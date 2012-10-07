@@ -15,10 +15,11 @@ lein run [dim]
 
 ### Commands
 
-*Arrow keys* move the empty tile.
-*R* randomizes the tiles for the current dimension
-*S* will execute solve-next which is a heuristic based solver
-  which does not actually complete.
+ - *Arrow keys* move the empty tile.
+ - *R* randomizes the tiles for the current dimension
+ - *S* will execute solve-next which is a heuristic based solver which
+  does not actually complete.
+ - *Q* will quit
 
 ## Note/Disclaimer
 
