@@ -1,6 +1,6 @@
 (defproject tile-game "1.0.0-SNAPSHOT"
   :description "A Tile Puzzle Game and Solver"
+  :min-lein-version "2.0.0"
   :main tile-game.core
-  :dependencies [[org.clojure/clojure "1.2.0"]
-                 [org.clojure/clojure-contrib "1.2.0"]]
-  :dev-dependencies [[swank-clojure "1.2.1"]])
+  :dependencies [[org.clojure/clojure "1.4.0"]]
+  :pluings [[lein-swank "1.4.4"]])
