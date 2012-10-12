@@ -1,8 +1,8 @@
 (ns tile-game.core
-  (:use (tile-game board))
-  (:import (javax.swing JFrame JPanel )
-           (java.awt Color Graphics Graphics2D Dimension Font)
-           (java.awt.event KeyAdapter KeyEvent)))
+  (:use [tile-game board])
+  (:import [javax.swing JFrame JPanel]
+           [java.awt Color Graphics Graphics2D Dimension Font]
+           [java.awt.event KeyAdapter KeyEvent]))
 
 (set! *warn-on-reflection* true)
 

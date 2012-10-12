@@ -1,6 +1,6 @@
 (ns tile-game.test.board
-  (:use [tile-game.board] :reload)
-  (:use [clojure.test]))
+  (:use tile-game.board
+        clojure.test))
 
 (deftest is-solved
   (is (solved? (create-board 3)))

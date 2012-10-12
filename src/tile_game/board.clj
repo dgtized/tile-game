@@ -1,5 +1,7 @@
 (ns tile-game.board
-  (:require (clojure.contrib seq math)))
+  (:require [clojure.contrib.seq :as seq]
+            [clojure.contrib.math :as math]
+            [clojure.set :as set]))
 
 (defn create-board [dim & opt]
   (let [board (vec (concat (range 1 (* dim dim)) '(0)))]
@@ -20,7 +22,7 @@
     (and (>= x 0) (< x dim) (>= y 0) (< y dim))))
 
 (defn- manhattan [p1 p2]
-  (map #(clojure.contrib.math/abs (- %1 %2)) p1 p2))
+  (map #(math/abs (- %1 %2)) p1 p2))
 
 (defn- distance [p1 p2]
   (apply + (manhattan p1 p2)))
@@ -32,7 +34,7 @@
   (nth board (coords->index board [x y])))
 
 (defn tile->index [board tile]
-  (first (clojure.contrib.seq/positions #(= tile %) board)))
+  (first (seq/positions #(= tile %) board)))
 
 (defn index->coords [board idx]
   (let [dim (dimension board)]
@@ -75,15 +77,15 @@
       board)))
 
 (defn dijkstra-map [dmap coords seen cost]
-  (if (empty? (clojure.set/difference coords seen))
+  (if (empty? (set/difference coords seen))
     dmap
     (let [costs (flatten (map #(list (coords->index dmap %) cost) coords))
-          edges (reduce clojure.set/union #{}
+          edges (reduce set/union #{}
                         (map #(set (adjacent-coords dmap %)) coords))
-          next (clojure.set/difference edges seen)]
+          next (set/difference edges seen)]
       (recur (apply assoc dmap costs)
              next
-             (clojure.set/union seen coords)
+             (set/union seen coords)
              (+ cost 1)))))
 
 (defn distance-map [board goal avoid]
@@ -101,7 +103,7 @@
 (defn ranked-moves [board dist-map tile avoid]
   (if (impassable? board dist-map tile)
     nil
-    (let [moves (clojure.set/difference (set (adjacent-tiles board tile)) avoid)]
+    (let [moves (set/difference (set (adjacent-tiles board tile)) avoid)]
       (sort-by #(nth dist-map (tile->index board %)) moves))))
 
 (defn move-to [board tile goal & [avoid]]
