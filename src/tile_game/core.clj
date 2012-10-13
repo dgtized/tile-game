@@ -33,8 +33,8 @@
         #^JFrame frame (JFrame.)
         #^JPanel panel (proxy [JPanel] []
                          (paint [g]
-                                (dorun (for [x (range dim) y (range dim)]
-                                         (render-tile g @*board* [x y])))))
+                           (doseq [x (range dim) y (range dim)]
+                             (render-tile g @*board* [x y]))))
         slide! (fn [& moves]
                  (prn :slide! moves)
                  (send (agent moves)
