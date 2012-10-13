@@ -26,7 +26,7 @@
                                      (int (+ cx (quot scale 2)))
                                      (int (+ cy (quot scale 2)))))))
 
-(def *board* (ref (create-board 2)))
+(def ^:dynamic *board* (ref (create-board 2)))
 
 (defn start-gui [dim]
   (let [size (* dim scale)
