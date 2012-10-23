@@ -3,4 +3,4 @@
   :min-lein-version "2.0.0"
   :main tile-game.core
   :dependencies [[org.clojure/clojure "1.4.0"]]
-  :pluings [[lein-swank "1.4.4"]])
+  :plugins [[lein-swank "1.4.4"]])
