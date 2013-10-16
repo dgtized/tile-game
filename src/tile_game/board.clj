@@ -1,6 +1,5 @@
 (ns tile-game.board
-  (:require [clojure.contrib.seq :as seq]
-            [clojure.contrib.math :as math]
+  (:require [clojure.math.numeric-tower :as math]
             [clojure.set :as set]))
 
 (defn create-board [dim & opt]
@@ -15,7 +14,7 @@
                 :right [ 1  0]})
 
 (defn- dimension [board]
-  (int (Math/sqrt (count board))))
+  (int (math/sqrt (count board))))
 
 (defn- bounded-coords? [board [x y]]
   (let [dim (dimension board)]
@@ -34,7 +33,8 @@
   (nth board (coords->index board [x y])))
 
 (defn tile->index [board tile]
-  (first (seq/positions #(= tile %) board)))
+  (first (keep-indexed (fn [i x] (when (= x tile) i))
+                       board)))
 
 (defn index->coords [board idx]
   (let [dim (dimension board)]
