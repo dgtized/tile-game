@@ -1,4 +1,4 @@
-(ns tile-game.test.board
+(ns tile-game.board-test
   (:use tile-game.board
         clojure.test))
 
