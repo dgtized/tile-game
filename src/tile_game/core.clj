@@ -26,7 +26,7 @@
                                      (int (+ cx (quot scale 2)))
                                      (int (+ cy (quot scale 2)))))))
 
-(def ^:dynamic *board* (ref (create-board 2)))
+(def board (ref (create-board 2)))
 
 (defn start-gui [dim]
   (let [size (* dim scale)
@@ -34,16 +34,16 @@
         #^JPanel panel (proxy [JPanel] []
                          (paint [g]
                            (doseq [x (range dim) y (range dim)]
-                             (render-tile g @*board* [x y]))))
+                             (render-tile g @board [x y]))))
         slide! (fn [& moves]
                  (prn :slide! moves)
                  (send (agent moves)
                        (fn [moves]
                          (doseq [piece moves]
-                           (dosync (alter *board* slide piece))
+                           (dosync (alter board slide piece))
                            (.repaint panel)
                            (Thread/sleep 150)))))
-        shuffle-board! (fn [dim] (dosync (ref-set *board*
+        shuffle-board! (fn [dim] (dosync (ref-set board
                                                   (create-board dim :shuffle))))]
     (shuffle-board! dim)
     (doto panel
@@ -59,7 +59,7 @@
                          KeyEvent/VK_DOWN  (slide! :down)
                          KeyEvent/VK_Q     (.dispose #^JFrame frame)
                          KeyEvent/VK_R     (do (shuffle-board! dim) (.repaint panel))
-                         KeyEvent/VK_S     (apply slide! (solve-next @*board*))
+                         KeyEvent/VK_S     (apply slide! (solve-next @board))
                          true)))))
     (doto frame (.setContentPane panel) .pack .show)
     slide!))
