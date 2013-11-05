@@ -1,6 +1,7 @@
 (ns tile-game.board
   (:require [clojure.math.numeric-tower :as math]
-            [clojure.set :as set]))
+            [clojure.set :as set]
+            [clojure.string :as s]))
 
 (defn create-board [dim & opt]
   (let [board (vec (concat (range 1 (* dim dim)) '(0)))]
@@ -15,6 +16,12 @@
 
 (defn- dimension [board]
   (int (math/sqrt (count board))))
+
+(defn print-board [board]
+  (let [dim (dimension board)
+        fmt (s/join " " (repeat dim "%3d"))]
+    (doseq [row (partition dim board)]
+      (apply printf (cons (str fmt "\n") row)))))
 
 (defn- bounded-coords? [board [x y]]
   (let [dim (dimension board)]
