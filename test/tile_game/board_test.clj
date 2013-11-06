@@ -95,3 +95,15 @@
 
 ;; (deftest solution-for-tile
 ;;   (is (= (solve-tile a-board 5) '(5))))
+
+(deftest circumfrence-coordinates
+  (is (= (circumfrence a-board [0 0] [1 1])
+         '([0 0] [1 0] [0 1] [1 1])))
+  (is (= (circumfrence a-board [0 0] [2 0])
+         '([0 0] [1 0] [2 0])))
+  (is (= (circumfrence a-board [0 0] [0 1])
+         '([0 0] [0 1])))
+  (is (= (circumfrence a-board [0 0] [2 2])
+         '([0 0] [1 0] [2 0]
+           [0 1] [2 1]
+           [0 2] [1 2] [2 2]))))

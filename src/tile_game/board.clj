@@ -173,3 +173,9 @@
     (let [next (+ 1 (count (solved-tiles board)))]
       (solve-tile board next))))
 
+(defn circumfrence [board [x0 y0] [x1 y1]]
+  (for [y (range y0 (inc y1))
+        x (range x0 (inc x1))
+        :when (or (= x x0) (= x x1)
+                  (= y y0) (= y y1)) ]
+    [x y]))
