@@ -7,11 +7,13 @@
 (defn distance [p1 p2]
   (apply + (manhattan p1 p2)))
 
+(defn add [[x y] [dx dy]]
+  [(+ x dx) (+ y dy)])
+
 (defn adjacent-to
   "Lists adjacent coordinates in clockwise order"
-  [[x y]]
-  (map (fn [[dx dy]] [(+ x dx) (+ y dy)])
-       [[0 -1] [1 0] [0 1] [-1 0]]))
+  [p]
+  (map (partial add p) [[0 -1] [1 0] [0 1] [-1 0]]))
 
 (defn closest-adjacent
   "Given two points p1, p2 in the form [x y], return coordinate
