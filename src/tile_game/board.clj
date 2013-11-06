@@ -55,12 +55,6 @@
 (defn- adjacent? [board p1 p2]
   (= 1 (coords/distance (tile->coords board p1) (tile->coords board p2))))
 
-(defn coord-add [board start delta]
-  (let [coords (coords/add start delta)]
-    (if (bounded-coords? board coords)
-      coords
-      start)))
-
 (defn slide-tile [board tile]
   (let [empty-pos (tile->index board 0)
         pos (tile->index board tile)]
@@ -72,7 +66,7 @@
 
 (defn slide-direction [board direction]
   (->> (dir-delta direction)
-       (coord-add board (tile->coords board 0))
+       (coords/add (tile->coords board 0))
        (coords->tile board)
        (slide-tile board)))
 
