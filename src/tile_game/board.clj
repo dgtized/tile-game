@@ -61,20 +61,25 @@
       coords
       start)))
 
-(defn slide [board arg]
-  (let [tile (if (contains? dir-delta arg)
-               (coords->tile board
-                             (coord-add board
-                                        (tile->coords board 0)
-                                        (dir-delta arg)))
-               arg)
-        empty-pos (tile->index board 0)
+(defn slide-tile [board tile]
+  (let [empty-pos (tile->index board 0)
         pos (tile->index board tile)]
     (if (adjacent? board 0 tile)
       (assoc board
         empty-pos tile
         pos 0)
       board)))
+
+(defn slide-direction [board direction]
+  (->> (dir-delta direction)
+       (coord-add board (tile->coords board 0))
+       (coords->tile board)
+       (slide-tile board)))
+
+(defn slide [board arg]
+  (if (contains? dir-delta arg)
+    (slide-direction board arg)
+    (slide-tile board arg)))
 
 (defn dijkstra-map [dmap coords seen cost]
   (if (empty? (set/difference coords seen))
@@ -120,7 +125,7 @@
                                                  (conj (set avoid) tile))]
                                (concat zero-path (list tile))))]
             (recur (concat path moves)
-                   (reduce slide board moves))))))))
+                   (reduce slide-tile board moves))))))))
 
 (defn solved-tiles [board]
   (let [solution (create-board (dimension board))]
@@ -142,7 +147,7 @@
   (let [path (move-to board tile goal solved)]
     (if (empty? more)
       path
-      (concat path (apply move-sequence (reduce slide board path) more)))))
+      (concat path (apply move-sequence (reduce slide-tile board path) more)))))
 
 (defn solve-tile [board tile]
   (let [solved (set (solved-tiles board))
