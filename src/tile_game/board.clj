@@ -52,13 +52,10 @@
   (map (partial coords->tile board)
        (adjacent-coords board (tile->coords board tile))))
 
-(defn- adjacent? [board p1 p2]
-  (= 1 (coords/distance (tile->coords board p1) (tile->coords board p2))))
-
 (defn slide-tile [board tile]
   (let [empty-pos (tile->index board 0)
         pos (tile->index board tile)]
-    (if (adjacent? board 0 tile)
+    (if (some #{tile} (adjacent-tiles board 0))
       (assoc board
         empty-pos tile
         pos 0)
