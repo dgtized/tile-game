@@ -79,7 +79,7 @@
 (defn dijkstra-map [dmap coords seen cost]
   (if (empty? (set/difference coords seen))
     dmap
-    (let [costs (flatten (map #(list (coords->index dmap %) cost) coords))
+    (let [costs (mapcat #(list (coords->index dmap %) cost) coords)
           edges (reduce set/union #{}
                         (map #(set (adjacent-coords dmap %)) coords))
           next (set/difference edges seen)]
