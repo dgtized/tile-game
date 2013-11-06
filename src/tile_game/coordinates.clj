@@ -1,5 +1,11 @@
 (ns tile-game.coordinates
-  (require [tile-game.board :refer [distance]]))
+  (require [clojure.math.numeric-tower :as math]))
+
+(defn manhattan [p1 p2]
+  (map #(math/abs (- %1 %2)) p1 p2))
+
+(defn distance [p1 p2]
+  (apply + (manhattan p1 p2)))
 
 (defn adjacent-to
   "Lists adjacent coordinates in clockwise order"

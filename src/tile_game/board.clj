@@ -1,5 +1,6 @@
 (ns tile-game.board
-  (:require [clojure.math.numeric-tower :as math]
+  (:require [tile-game.coordinates :refer [distance]]
+            [clojure.math.numeric-tower :as math]
             [clojure.set :as set]
             [clojure.string :as s]))
 
@@ -26,12 +27,6 @@
 (defn- bounded-coords? [board [x y]]
   (let [dim (dimension board)]
     (and (>= x 0) (< x dim) (>= y 0) (< y dim))))
-
-(defn- manhattan [p1 p2]
-  (map #(math/abs (- %1 %2)) p1 p2))
-
-(defn distance [p1 p2]
-  (apply + (manhattan p1 p2)))
 
 (defn coords->index [board [x y]]
   (+ (* y (dimension board)) x))
