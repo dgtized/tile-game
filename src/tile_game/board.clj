@@ -1,5 +1,5 @@
 (ns tile-game.board
-  (:require [tile-game.coordinates :refer [distance adjacent-to]]
+  (:require [tile-game.coordinates :as coords]
             [clojure.math.numeric-tower :as math]
             [clojure.set :as set]
             [clojure.string :as s]))
@@ -45,21 +45,21 @@
 (defn tile->coords [board tile]
   (index->coords board (tile->index board tile)))
 
-(defn adjacent-coords [board [x y]]
-  (filter (partial bounded-coords? board) (adjacent-to [x y])))
+(defn adjacent-coords [board p]
+  (filter (partial bounded-coords? board) (coords/adjacent-to p)))
 
 (defn- adjacent-tiles [board tile]
   (map (partial coords->tile board)
        (adjacent-coords board (tile->coords board tile))))
 
 (defn- adjacent? [board p1 p2]
-  (= 1 (distance (tile->coords board p1) (tile->coords board p2))))
+  (= 1 (coords/distance (tile->coords board p1) (tile->coords board p2))))
 
-(defn coord-add [board [x y] [dx dy]]
-  (let [coords [(+ x dx) (+ y dy)]]
+(defn coord-add [board start delta]
+  (let [coords (coords/add start delta)]
     (if (bounded-coords? board coords)
       coords
-      [x y])))
+      start)))
 
 (defn slide [board arg]
   (let [tile (if (contains? dir-delta arg)
