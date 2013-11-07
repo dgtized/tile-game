@@ -93,5 +93,10 @@
   (is (last-on-row? a-board (goal-coord a-board 0)))
   (is (not (last-on-row? a-board (goal-coord a-board 1)))))
 
+(deftest move-a-sequence
+  (is (= (move-sequence a-board [5 [2 0] #{}]) '(2 3 5)))
+  (is (= (move-sequence a-board [5 [2 0] #{}] [4 [1 0] #{5}])
+         '(2 3 5 2 3 1 4 3 1 4))))
+
 ;; (deftest solution-for-tile
 ;;   (is (= (solve-tile a-board 5) '(5))))
