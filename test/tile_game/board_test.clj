@@ -45,29 +45,28 @@
        ))
 
 (deftest distance-mapper
-  (is (= (distance-map a-board [0 0] #{0}) [0 1 2 1 9 3 2 3 4]))
-  (is (= (distance-map a-board [0 0] #{1}) [9 9 9 9 9 9 9 9 9])))
+  (is (= [0 1 2 1 9 3 2 3 4] (distance-map a-board [0 0] #{0})))
+  (is (= [9 9 9 9 9 9 9 9 9] (distance-map a-board [0 0] #{1}))))
 
 (deftest move-a-tile
-  (is (= (move-to a-board-7 0 [0 0])        '(6 4 1)))
-  (is (= (move-to a-board-7 0 [0 0] #{7})   '(6 4 1)))
-  (is (= (move-to a-board-7 0 [0 0] #{7 6}) '(8 5 3 2 1)))
-  (is (= (move-to a-board-7 0 [0 0] #{7 6 5}) nil))
+  (is (= '(6 4 1) (move-to a-board-7 0 [0 0])))
+  (is (= '(6 4 1) (move-to a-board-7 0 [0 0] #{7})))
+  (is (= '(8 5 3 2 1) (move-to a-board-7 0 [0 0] #{7 6})))
+  (is (= nil (move-to a-board-7 0 [0 0] #{7 6 5})))
 
-  (is (= (move-to a-board 7 [1 1]) '(7)))
-  (is (= (move-to a-board 5 [2 0]) '(2 3 5)))
-  (is (= (move-to a-board 5 [2 1]) '()))
+  (is (= '(7) (move-to a-board 7 [1 1])))
+  (is (= '(2 3 5) (move-to a-board 5 [2 0])))
+  (is (= '() (move-to a-board 5 [2 1])))
 
-  (is (= (move-to a-board 0 [0 0] #{1}) nil))
-  (is (= (move-to a-board 5 [2 0] #{3}) nil))
+  (is (= nil (move-to a-board 0 [0 0] #{1})))
+  (is (= nil (move-to a-board 5 [2 0] #{3})))
 
-  (is (= (move-to a-board 5 [2 1]) '()))
-  (is (= (move-to a-board 0 [1 1]) '()))
-  (is (= (move-to a-board 0 [1 0]) '(2)))
-  (is (= (move-to a-board 5 [2 0]) '(2 3 5)))
+  (is (= '() (move-to a-board 5 [2 1])))
+  (is (= '() (move-to a-board 0 [1 1])))
+  (is (= '(2) (move-to a-board 0 [1 0])))
+  (is (= '(2 3 5) (move-to a-board 5 [2 0])))
 
-  (is (= (move-to [1 2 3 6 5 7 0 4 14 13 9 12 15 8 10 11] 4 [3 0] #{1 2 3}) nil))
-  )
+  (is (= nil (move-to [1 2 3 6 5 7 0 4 14 13 9 12 15 8 10 11] 4 [3 0] #{1 2 3}))))
 
 (deftest move-a-tile-to-location
   (are [tile coord]
@@ -85,8 +84,8 @@
   (is (= '(1 2) (solved-tiles [1 2 14 8 6 0 13 3 12 9 11 10 5 15 7 4]))))
 
 (deftest goal-coords
-  (is (= (goal-coord a-board 0) [2 2]))
-  (is (= (goal-coord a-board 1) [0 0])))
+  (is (= [2 2] (goal-coord a-board 0)))
+  (is (= [0 0] (goal-coord a-board 1))))
 
 (deftest last-tile-on-row
   (is (last-on-row? a-board (goal-coord a-board 3)))
@@ -94,9 +93,9 @@
   (is (not (last-on-row? a-board (goal-coord a-board 1)))))
 
 (deftest move-a-sequence
-  (is (= (move-sequence a-board [5 [2 0] #{}]) '(2 3 5)))
-  (is (= (move-sequence a-board [5 [2 0] #{}] [4 [1 0] #{5}])
-         '(2 3 5 2 3 1 4 3 1 4))))
+  (is (= '(2 3 5) (move-sequence a-board [5 [2 0] #{}])))
+  (is (= '(2 3 5 2 3 1 4 3 1 4)
+         (move-sequence a-board [5 [2 0] #{}] [4 [1 0] #{5}]))))
 
 ;; (deftest solution-for-tile
 ;;   (is (= (solve-tile a-board 5) '(5))))
