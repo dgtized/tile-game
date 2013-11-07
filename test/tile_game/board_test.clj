@@ -4,25 +4,25 @@
 
 (deftest is-solved
   (is (solved? (create-board 3)))
-  (is (solved? (vec '(1 2 3 0))))
-  (is (not (solved? (vec '(0 1 2 3)))))
-  (is (not (solved? (vec '(1 3 2 0))))))
+  (is (solved? [1 2 3 0]))
+  (is (not (solved? [0 1 2 3])))
+  (is (not (solved? [1 3 2 0]))))
 
-(def a-board (vec '(1 2 3
-                    4 0 5
-                    6 7 8)))
-(def a-board-2 (vec '(1 0 3
-                      4 2 5
-                      6 7 8)))
-(def a-board-4 (vec '(1 2 3
-                      0 4 5
-                      6 7 8)))
-(def a-board-5 (vec '(1 2 3
-                      4 5 0
-                      6 7 8)))
-(def a-board-7 (vec '(1 2 3
-                      4 7 5
-                      6 0 8)))
+(def a-board [1 2 3
+              4 0 5
+              6 7 8])
+(def a-board-2 [1 0 3
+                4 2 5
+                6 7 8])
+(def a-board-4 [1 2 3
+                0 4 5
+                6 7 8])
+(def a-board-5 [1 2 3
+                4 5 0
+                6 7 8])
+(def a-board-7 [1 2 3
+                4 7 5
+                6 0 8])
 
 (deftest coordinates
   (are [tile coord]
