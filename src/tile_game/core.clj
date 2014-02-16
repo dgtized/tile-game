@@ -61,13 +61,12 @@
              KeyEvent/VK_RIGHT (slide! render :right)
              KeyEvent/VK_UP    (slide! render :up)
              KeyEvent/VK_DOWN  (slide! render :down)
-             KeyEvent/VK_Q     (.dispose #^JFrame frame)
+             KeyEvent/VK_Q     (do (.dispose #^JFrame frame) (a/close! render))
              KeyEvent/VK_R     (do (shuffle-board! dim) (.repaint panel))
              KeyEvent/VK_S     (apply slide! (cons render (solve-next @board)))
              true)))))
     (doto frame (.setContentPane panel) .pack .show)
-    (a/go (while true
-            (a/<! render)
+    (a/go (while (a/<! render)
             (.repaint panel)))
     render))
 
