@@ -35,16 +35,18 @@
                          (paint [g]
                            (doseq [x (range dim) y (range dim)]
                              (render-tile g @board [x y]))))
-        slide! (fn [& moves]
-                 (prn :slide! moves)
-                 (send (agent moves)
-                       (fn [moves]
-                         (doseq [piece moves]
-                           (dosync (alter board slide piece))
-                           (.repaint panel)
-                           (Thread/sleep 150)))))
-        shuffle-board! (fn [dim] (dosync (ref-set board
-                                                  (create-board dim :shuffle))))]
+        slide!
+        (fn [& moves]
+          (prn :slide! moves)
+          (send (agent moves)
+                (fn [moves]
+                  (doseq [piece moves]
+                    (dosync (alter board slide piece))
+                    (.repaint panel)
+                    (Thread/sleep 150)))))
+        shuffle-board!
+        (fn [dim] (dosync (ref-set board
+                                   (create-board dim :shuffle))))]
     (shuffle-board! dim)
     (doto panel
       (.setPreferredSize (Dimension. size size))
@@ -52,15 +54,15 @@
       (.addKeyListener
        (proxy [KeyAdapter] []
          (keyPressed [#^KeyEvent e]
-                     (condp = (.getKeyCode e)
-                         KeyEvent/VK_LEFT  (slide! :left)
-                         KeyEvent/VK_RIGHT (slide! :right)
-                         KeyEvent/VK_UP    (slide! :up)
-                         KeyEvent/VK_DOWN  (slide! :down)
-                         KeyEvent/VK_Q     (.dispose #^JFrame frame)
-                         KeyEvent/VK_R     (do (shuffle-board! dim) (.repaint panel))
-                         KeyEvent/VK_S     (apply slide! (solve-next @board))
-                         true)))))
+           (condp = (.getKeyCode e)
+             KeyEvent/VK_LEFT  (slide! :left)
+             KeyEvent/VK_RIGHT (slide! :right)
+             KeyEvent/VK_UP    (slide! :up)
+             KeyEvent/VK_DOWN  (slide! :down)
+             KeyEvent/VK_Q     (.dispose #^JFrame frame)
+             KeyEvent/VK_R     (do (shuffle-board! dim) (.repaint panel))
+             KeyEvent/VK_S     (apply slide! (solve-next @board))
+             true)))))
     (doto frame (.setContentPane panel) .pack .show)
     slide!))
 
