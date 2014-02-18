@@ -27,7 +27,10 @@
                                      (int (+ cx (quot scale 2)))
                                      (int (+ cy (quot scale 2)))))))
 
-(def board (ref (create-board 2)))
+(def board (ref (create-board 4 :shuffle)))
+
+(defn shuffle-board! [dim]
+  (dosync (ref-set board (create-board dim :shuffle))))
 
 (defn slide!
   [render & moves]
@@ -45,11 +48,7 @@
                          (paint [g]
                            (doseq [x (range dim) y (range dim)]
                              (render-tile g @board [x y]))))
-        render (a/chan)
-        shuffle-board!
-        (fn [dim] (dosync (ref-set board
-                                   (create-board dim :shuffle))))]
-    (shuffle-board! dim)
+        render (a/chan)]
     (doto panel
       (.setPreferredSize (Dimension. size size))
       (.setFocusable true)
