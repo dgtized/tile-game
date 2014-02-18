@@ -14,8 +14,8 @@
                 :left  [-1  0]
                 :right [ 1  0]})
 
-(defn- dimension [board]
-  (int (Math/sqrt (count board))))
+(defn dimension [board]
+  (int (math/sqrt (count board))))
 
 ;; (defn print-board [board]
 ;;   (let [dim (dimension board)

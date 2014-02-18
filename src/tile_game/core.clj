@@ -42,8 +42,9 @@
       (a/>! render :render)
       (Thread/sleep 150))))
 
-(defn start-gui [dim]
-  (let [size (* dim scale)
+(defn start-gui []
+  (let [dim (dimension @board)
+        size (* dim scale)
         #^JFrame frame (JFrame.)
         #^JPanel panel (proxy [JPanel] []
                          (paint [g]
