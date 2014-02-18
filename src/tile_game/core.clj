@@ -29,8 +29,9 @@
 
 (def board (ref (create-board 4 :shuffle)))
 
-(defn shuffle-board! [dim]
-  (dosync (ref-set board (create-board dim :shuffle))))
+(defn shuffle-board! [dim render]
+  (dosync (ref-set board (create-board dim :shuffle)))
+  (a/put! render :render))
 
 (defn slide!
   [render & moves]
@@ -61,7 +62,7 @@
              KeyEvent/VK_UP    (slide! render :up)
              KeyEvent/VK_DOWN  (slide! render :down)
              KeyEvent/VK_Q     (do (.dispose #^JFrame frame) (a/close! render))
-             KeyEvent/VK_R     (do (shuffle-board! dim) (.repaint panel))
+             KeyEvent/VK_R     (shuffle-board! dim render)
              KeyEvent/VK_S     (apply slide! (cons render (solve-next @board)))
              true)))))
     (doto frame (.setContentPane panel) .pack .show)
