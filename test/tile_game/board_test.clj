@@ -49,7 +49,7 @@
   (is (= [9 9 9 9 9 9 9 9 9] (distance-map a-board [0 0] #{1}))))
 
 (deftest move-a-tile
-  (is (= '(6 4 1) (move-to a-board-7 0 [0 0])))
+  (is (= '(7 4 1) (move-to a-board-7 0 [0 0])))
   (is (= '(6 4 1) (move-to a-board-7 0 [0 0] #{7})))
   (is (= '(8 5 3 2 1) (move-to a-board-7 0 [0 0] #{7 6})))
   (is (= nil (move-to a-board-7 0 [0 0] #{7 6 5})))
