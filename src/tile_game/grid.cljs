@@ -64,6 +64,8 @@
     (slide! direction)))
 
 (defn init []
+  ;; Warning: changes here require a page refresh to take effect
+  ;; Is it possible to attach page keydown event so that reagent can rebind?
   (.addEventListener js/document "keydown" handle-keydown)
   (r/render-component [tile-grid] (. js/document (getElementById "grid"))))
 
