@@ -17,6 +17,9 @@
 (defn new-board! [& args]
   #(swap! app-state assoc :board (apply b/create-board args)))
 
+(defn slide! [arg]
+  (swap! app-state update-in [:board] b/slide arg))
+
 (defn board-size-slider [size]
   [:div
    [:button {:on-click (new-board! size)} "New Game"]
@@ -29,8 +32,7 @@
 (defn render-tile [[x y] tile]
   (if-not (zero? tile)
     (let [fill-color (nth colors tile)]
-      [:g {:key (str "tile-" tile)
-           :on-click #(swap! app-state update-in [:board] b/slide-tile tile)}
+      [:g {:key (str "tile-" tile) :on-click #(slide! tile)}
        [:rect {:x (+ x 0.05) :y (+ y 0.05) :width 0.9 :height 0.9 :fill fill-color}]
        [:text {:x (+ 0.5 x) :y (+ 0.65 y)
                :font-family "Verdana" :font-size 0.4 :text-anchor "middle"}
@@ -59,7 +61,7 @@
 (defn handle-keydown [e]
   (when-let [direction (codename (.-keyCode e))]
     (.preventDefault e)
-    (swap! app-state update-in [:board] b/slide direction)))
+    (slide! direction)))
 
 (defn init []
   (.addEventListener js/document "keydown" handle-keydown)
