@@ -11,8 +11,7 @@
           "#0000C0" "#3030FF" "#800080" "#FF00FF"]))
 
 (defonce app-state
-  (r/atom {:board (b/create-board 5)
-           :dim 5}))
+  (r/atom {:board (b/create-board 5)}))
 
 (defn render-tile [[x y] tile]
   (if-not (zero? tile)
@@ -25,7 +24,8 @@
         (str tile)]])))
 
 (defn tile-grid []
-  (let [{:keys [board dim]} @app-state]
+  (let [{:keys [board]} @app-state
+        dim (b/dimension board)]
     [:center
      [:h1 "Tile Grid"]
      [:svg {:view-box (str "0 0 " dim " " dim) :width 800 :height 800}
