@@ -12,20 +12,16 @@
 
 (defonce app-state
   (r/atom {:board (b/create-board 4)
-           :size 4
-           :sequence []}))
+           :size 4}))
 
 (defn board-size-slider [size]
   [:div
    [:button
-    {:on-click #(swap! app-state assoc
-                       :board (b/create-board size)
-                       :sequence [])}
+    {:on-click #(swap! app-state assoc :board (b/create-board size))}
     "New Game"]
    [:button
     {:on-click #(swap! app-state assoc
-                       :board (b/create-board size :shuffle)
-                       :sequence [])}
+                       :board (b/create-board size :shuffle))}
     "Shuffle"]
    [:label (str "Board size: " size)]
    [:input {:type "range" :style {:width "25%"}
@@ -43,7 +39,7 @@
         (str tile)]])))
 
 (defn tile-grid []
-  (let [{:keys [board size sequence]} @app-state
+  (let [{:keys [board size]} @app-state
         dim (b/dimension board)]
     [:center
      [:h1 "Tile Grid"]
@@ -51,10 +47,9 @@
       (for [x (range dim) y (range dim)]
         (let [tile (nth board (+ (* y dim) x))]
           (render-tile [x y] tile)))]
-     [:div (str sequence)]
-     (board-size-slider size)
-     [:button
-      {:on-click #(swap! app-state assoc :sequence (b/solve-next (:board @app-state)))}
-      "Solve Next Tile"]]))
+     [:div (if (b/solved? board)
+             "Solved!"
+             (str "Suggested Moves: " (b/solve-next board)))]
+     (board-size-slider size)]))
 
 (r/render-component [tile-grid] (. js/document (getElementById "grid")))
