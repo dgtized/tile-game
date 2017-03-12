@@ -42,7 +42,7 @@
   (let [{:keys [board size]} @app-state
         dim (b/dimension board)]
     [:center
-     [:h1 "Tile Grid"]
+     [:h1 "Tile Puzzle"]
      [:svg {:view-box (str "0 0 " dim " " dim) :width 800 :height 800}
       (for [x (range dim) y (range dim)]
         (let [tile (nth board (+ (* y dim) x))]
