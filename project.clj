@@ -3,7 +3,6 @@
   :min-lein-version "2.0.0"
   :main tile-game.core
   :dependencies [[org.clojure/clojure "1.8.0"]
-                 [org.clojure/math.numeric-tower "0.0.2"]
                  [org.clojure/clojurescript "1.9.494"]
                  [rm-hull/monet "0.3.0"]]
   :plugins [[lein-figwheel "0.5.9"]]

@@ -1,8 +1,11 @@
-(ns tile-game.coordinates
-  (require [clojure.math.numeric-tower :as math]))
+(ns tile-game.coordinates)
+
+(defn ^:private abs
+  [x]
+  #?(:clj (Math/abs (long x)) :cljs (Math/abs x)))
 
 (defn manhattan [p1 p2]
-  (map #(math/abs (- %1 %2)) p1 p2))
+  (map #(abs (- %1 %2)) p1 p2))
 
 (defn distance [p1 p2]
   (apply + (manhattan p1 p2)))
