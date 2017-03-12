@@ -11,7 +11,21 @@
           "#0000C0" "#3030FF" "#800080" "#FF00FF"]))
 
 (defonce app-state
-  (r/atom {:board (b/create-board 5)}))
+  (r/atom {:board (b/create-board 4)
+           :size 4}))
+
+(defn board-size-slider [size]
+  [:div
+   [:button
+    {:on-click (fn [e] (swap! app-state assoc :board (b/create-board size)))}
+    "New Game"]
+   [:button
+    {:on-click (fn [e] (swap! app-state assoc :board (b/create-board size :shuffle)))}
+    "Shuffle"]
+   [:label (str "Board size: " size)]
+   [:input {:type "range" :style {:width "25%"}
+            :value size :min 2 :max 8
+            :on-change (fn [e] (swap! app-state assoc :size (.-target.value e)))}]])
 
 (defn render-tile [[x y] tile]
   (if-not (zero? tile)
@@ -24,13 +38,14 @@
         (str tile)]])))
 
 (defn tile-grid []
-  (let [{:keys [board]} @app-state
+  (let [{:keys [board size]} @app-state
         dim (b/dimension board)]
     [:center
      [:h1 "Tile Grid"]
      [:svg {:view-box (str "0 0 " dim " " dim) :width 800 :height 800}
       (for [x (range dim) y (range dim)]
         (let [tile (nth board (+ (* y dim) x))]
-          (render-tile [x y] tile)))]]))
+          (render-tile [x y] tile)))]
+     (board-size-slider size)]))
 
 (r/render-component [tile-grid] (. js/document (getElementById "grid")))
