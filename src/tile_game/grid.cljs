@@ -14,15 +14,13 @@
   (r/atom {:board (b/create-board 4)
            :size 4}))
 
+(defn new-board! [& args]
+  #(swap! app-state assoc :board (apply b/create-board args)))
+
 (defn board-size-slider [size]
   [:div
-   [:button
-    {:on-click #(swap! app-state assoc :board (b/create-board size))}
-    "New Game"]
-   [:button
-    {:on-click #(swap! app-state assoc
-                       :board (b/create-board size :shuffle))}
-    "Shuffle"]
+   [:button {:on-click (new-board! size)} "New Game"]
+   [:button {:on-click (new-board! size :shuffle)} "Shuffle"]
    [:label (str "Board size: " size)]
    [:input {:type "range" :style {:width "25%"}
             :value size :min 2 :max 8
