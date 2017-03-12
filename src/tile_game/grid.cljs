@@ -52,4 +52,20 @@
              (str "Suggested Moves: " (b/solve-next board)))]
      (board-size-slider size)]))
 
-(r/render-component [tile-grid] (. js/document (getElementById "grid")))
+(def codename
+  {37 :left
+   39 :right
+   38 :up
+   40 :down})
+
+(defn handle-keydown [e]
+  (when-let [direction (codename (.-keyCode e))]
+    (.preventDefault e)
+    (swap! app-state update-in [:board] b/slide direction)))
+
+(defn init []
+  (.addEventListener js/document "keydown" handle-keydown)
+  (r/render-component [tile-grid] (. js/document (getElementById "grid"))))
+
+(defonce start
+  (init))
