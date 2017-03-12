@@ -9,13 +9,13 @@
              "#000080" "#0000FF" "#800080" "#FF00FF"])
 
 (defonce app-state
-  (r/atom {:board (cons :empty (range 1 16))
+  (r/atom {:board (range 0 16)
            :dim 4}))
 
 (defn render-tile [[x y] tile]
-  (if-not (= tile :empty)
+  (if-not (zero? tile)
     (let [fill-color (colors tile)]
-      [:g {:key (str "tile-" tile)}
+      [:g {:key (str "tile-" tile) :on-click #(println tile)}
        [:rect {:x (+ x 0.05) :y (+ y 0.05) :width 0.9 :height 0.9 :fill fill-color}]
        [:text {:x (+ 0.5 x) :y (+ 0.65 y)
                :font-family "Verdana" :font-size 0.4 :text-anchor "middle"}
