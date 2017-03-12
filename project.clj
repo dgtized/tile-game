@@ -7,9 +7,10 @@
                  [org.clojure/clojurescript "1.9.494"]]
   :plugins [[lein-figwheel "0.5.9"]]
   :sources-paths ["src"]
-  :clean-targets ["resources/public/js/out"
-                  "resources/public/js/tile-game.js"
-                  :target-path]
+  :clean-targets ^{:protect false}
+  ["resources/public/js/out"
+   "resources/public/js/tile-game.js"
+   :target-path]
   :cljsbuild
   { :builds [{:id "tile-game"
               :source-paths ["src"]
