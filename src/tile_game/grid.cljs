@@ -1,34 +1,29 @@
 (ns tile-game.grid
-  (:require [monet.canvas :as cv]))
+  (:require [reagent.core :as r]))
 
-(defonce canvas-dom (.getElementById js/document "grid"))
-(defonce monet-canvas (cv/init canvas-dom "2d"))
-
-(defn render-tile [])
+(enable-console-print!)
 
 (def colors ["#000000" "#808080" "#C0C0C0" "#FFFFFF"
              "#800000" "#FF0000" "#808000" "#FFFF00"
              "#008000" "#00FF00" "#008080" "#00FFFF"
              "#000080" "#0000FF" "#800080" "#FF00FF"])
 
-(def dim 4)
-(def scale 200)
+(defonce app-state
+  (r/atom {:board (range 0 16)
+           :dim 4}))
 
-(doseq [tile (range 0 (dec (* dim dim)))]
-  (cv/add-entity monet-canvas (symbol (str "tile-" tile))
-                 (cv/entity
-                  {:x (+ 10 (* (rem tile dim) (+ scale 10)))
-                   :y (+ 10 (* (quot tile dim) (+ scale 10)))
-                   :w scale :h scale} ; val
-                  nil
-                  (fn [ctx val]
-                    (-> ctx
-                        (cv/fill-style (colors (inc tile)))
-                        (cv/fill-rect val)
-                        (cv/fill-style "black")
-                        (cv/text-align "center")
-                        (cv/text-baseline "middle")
-                        (cv/font-style "bold 48px serif")
-                        (cv/text {:text (str (inc tile))
-                                  :x (+ (:x val) (/ (:w val) 2))
-                                  :y (+ (:y val) (* (:h val) 0.50))}))))))
+(defn tile-grid []
+  (let [{:keys [board dim]} @app-state]
+    [:center
+     [:h1 "Tile Grid"]
+     [:svg {:view-box "0 0 4 4" :width 800 :height 800}
+      (for [x (range dim) y (range dim)]
+        (let [tile (nth board (+ (* y dim) x))
+              fill-color (colors tile)]
+          [:g {:key (str "tile-" tile)}
+           [:rect {:x x :y y :width 0.9 :height 0.9 :fill fill-color}]
+           [:text {:x (+ 0.45 x) :y (+ 0.6 y)
+                   :font-family "Verdana" :font-size 0.4 :text-anchor "middle"}
+            (str tile)]]))]]))
+
+(r/render-component [tile-grid] (. js/document (getElementById "grid")))
