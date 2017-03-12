@@ -12,18 +12,21 @@
   (r/atom {:board (range 0 16)
            :dim 4}))
 
+(defn render-tile [[x y] tile]
+  (let [fill-color (colors tile)]
+    [:g {:key (str "tile-" tile)}
+     [:rect {:x (+ x 0.05) :y (+ y 0.05) :width 0.9 :height 0.9 :fill fill-color}]
+     [:text {:x (+ 0.5 x) :y (+ 0.65 y)
+             :font-family "Verdana" :font-size 0.4 :text-anchor "middle"}
+      (str tile)]]))
+
 (defn tile-grid []
   (let [{:keys [board dim]} @app-state]
     [:center
      [:h1 "Tile Grid"]
      [:svg {:view-box "0 0 4 4" :width 800 :height 800}
       (for [x (range dim) y (range dim)]
-        (let [tile (nth board (+ (* y dim) x))
-              fill-color (colors tile)]
-          [:g {:key (str "tile-" tile)}
-           [:rect {:x x :y y :width 0.9 :height 0.9 :fill fill-color}]
-           [:text {:x (+ 0.45 x) :y (+ 0.6 y)
-                   :font-family "Verdana" :font-size 0.4 :text-anchor "middle"}
-            (str tile)]]))]]))
+        (let [tile (nth board (+ (* y dim) x))]
+          (render-tile [x y] tile)))]]))
 
 (r/render-component [tile-grid] (. js/document (getElementById "grid")))
