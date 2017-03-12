@@ -157,6 +157,7 @@
         (move-to board tile goal solved)))))
 
 (defn solve-next [board]
-  (if-not (solved? board)
+  (if (solved? board)
+    []
     (let [next (+ 1 (count (solved-tiles board)))]
       (solve-tile board next))))
