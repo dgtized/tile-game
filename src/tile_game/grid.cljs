@@ -65,18 +65,43 @@
       "© 2017 Charles L.G. Comstock "
       [:a {:href "https://github.com/dgtized/tile-game"} "(github)"]]]))
 
+(defn playback-solution [cancel delay]
+  (let [out (async/chan)]
+    (go-loop [[move & remaining] (b/solve-next (:board @app-state))]
+      (if move
+        (do
+          (async/<! (async/timeout delay))
+          (let [[_ c] (async/alts! [cancel [out move]])]
+            (when (not= c cancel)
+              (recur remaining))))
+        (async/close! out)))
+    out))
+
 (defn controller [command]
-  (go-loop []
-    (when-let [key (async/<! command)]
-      (slide! key))
-    (recur))
+  (go-loop [cancel (async/chan 1) playback (async/chan 1)]
+    (when-let [[key ch] (async/alts! [command playback])]
+      (cond
+        (= ch command)
+        (if (= key :solve)
+          (do (async/close! cancel)
+              (let [new-cancel (async/chan 1)]
+                (recur new-cancel (playback-solution new-cancel 250))))
+          (do (async/close! cancel)
+              (slide! key)
+              (recur (async/chan 1) (async/chan 1))))
+        (= ch playback)
+        (if (nil? key)
+          (recur (async/chan 1) (async/chan 1))
+          (slide! key))))
+    (recur cancel playback))
   tile-grid)
 
 (def codename
   {37 :left
    39 :right
    38 :up
-   40 :down})
+   40 :down
+   83 :solve})
 
 (defn handle-keydown [command]
   (fn [e]
