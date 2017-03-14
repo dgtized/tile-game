@@ -12,7 +12,8 @@
 
 (defonce app-state
   (r/atom {:board (b/create-board 4)
-           :size 4}))
+           :size 4
+           :analysis-mode false}))
 
 (defn new-board! [& args]
   #(swap! app-state assoc :board (apply b/create-board args)))
@@ -39,7 +40,7 @@
         (str tile)]])))
 
 (defn tile-grid []
-  (let [{:keys [board size]} @app-state
+  (let [{:keys [board size analysis-mode]} @app-state
         dim (b/dimension board)]
     [:center
      [:h1 "Tile Puzzle"]
@@ -47,10 +48,17 @@
       (for [x (range dim) y (range dim)]
         (let [tile (nth board (+ (* y dim) x))]
           (render-tile [x y] tile)))]
-     [:div (if (b/solved? board)
-             "Solved!"
-             (str "Suggested Moves: " (b/solve-next board)))]
+     [:h4 (if (b/solved? board) "Solved!" "Slide tiles with arrow keys or clicking on tile")]
      (board-size-slider size)
+     [:div
+      [:label "Analysis Mode"]
+      [:input {:type "checkbox" :checked analysis-mode
+               :on-click #(swap! app-state update-in [:analysis-mode] not)}]
+      [:br]
+      (when analysis-mode
+        (if (b/solved? board)
+          "Solved!"
+          (str "Suggested Moves: " (b/solve-next board))))]
      [:p
       "© 2017 Charles L.G. Comstock "
       [:a {:href "https://github.com/dgtized/tile-game"} "(github)"]]]))
