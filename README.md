@@ -2,6 +2,8 @@
 
 A Platform and Solver for ordering NxN tiles into the correct order
 
+https://dgtized.github.io/tile-game
+
 In 2001, I took a Scheme based class where one of the final projects
 was to write a program to visualize and solve a 4x4 tile game, aka the
 15 tile puzzle.  I wrote up a solution for the class, but the AI had
@@ -9,9 +11,21 @@ no planning ability.  It was a very heuristic heavy solution, and I
 always wanted to improve on it.  Recently I decided to learn Clojure
 and thought this would be a nice project to dig my teeth into.
 
-## Usage
+## Update March 2017
 
-lein run [dim]
+Ported it to cross-compile to clojurescript for the browser.
+
+## Local Usage
+
+For java client:
+
+    lein run [dim]
+
+For web client
+
+    lein figwheel
+
+visit http://localhost:3449
 
 ### Commands
 

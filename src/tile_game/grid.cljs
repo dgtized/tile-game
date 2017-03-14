@@ -50,7 +50,10 @@
      [:div (if (b/solved? board)
              "Solved!"
              (str "Suggested Moves: " (b/solve-next board)))]
-     (board-size-slider size)]))
+     (board-size-slider size)
+     [:p
+      "© 2017 Charles L.G. Comstock "
+      [:a {:href "https://github.com/dgtized/tile-game"} "(github)"]]]))
 
 (def codename
   {37 :left
