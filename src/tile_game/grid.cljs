@@ -32,16 +32,16 @@
             :value size :min 2 :max 8
             :on-change (fn [e] (swap! app-state assoc :size (.-target.value e)))}]])
 
-(defn render-tile [[x y] tile]
+(defn render-tile [[x y] tile command]
   (if-not (zero? tile)
     (let [fill-color (nth colors tile)]
-      [:g {:key (str "tile-" tile) :on-click #(slide! tile)}
+      [:g {:key (str "tile-" tile) :on-click #(async/put! command tile)}
        [:rect {:x (+ x 0.05) :y (+ y 0.05) :width 0.9 :height 0.9 :fill fill-color}]
        [:text {:x (+ 0.5 x) :y (+ 0.65 y)
                :font-family "Verdana" :font-size 0.4 :text-anchor "middle"}
         (str tile)]])))
 
-(defn tile-grid [run-solver]
+(defn tile-grid [command]
   (let [{:keys [board size analysis-mode]} @app-state
         dim (b/dimension board)]
     [:center
@@ -49,7 +49,7 @@
      [:svg {:view-box (str "0 0 " dim " " dim) :width 800 :height 800}
       (for [x (range dim) y (range dim)]
         (let [tile (nth board (+ (* y dim) x))]
-          (render-tile [x y] tile)))]
+          (render-tile [x y] tile command)))]
      [:h4 (if (b/solved? board) "Solved!" "Slide tiles with arrow keys or clicking on tile")]
      (board-size-slider size)
      [:div
@@ -62,7 +62,7 @@
           "Solved!"
           [:div
            (str "Suggested Moves: " (b/solve-next board))
-           [:div [:button {:on-click run-solver} "Run solver!"]]]))]
+           [:div [:button {:on-click #(async/put! command :solve)} "Run solver!"]]]))]
      [:p
       "© 2017 Charles L.G. Comstock "
       [:a {:href "https://github.com/dgtized/tile-game"} "(github)"]]]))
@@ -90,7 +90,7 @@
           (slide! key))
         (recur new-cancel)))
     (recur cancel))
-  (fn [] (tile-grid #(async/put! command :solve))))
+  (fn [] (tile-grid command)))
 
 (def codename
   {37 :left
