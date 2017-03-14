@@ -12,7 +12,6 @@
           "#008000" "#00FF00" "#008080" "#00FFFF"
           "#0000C0" "#3030FF" "#800080" "#FF00FF"]))
 
-(defonce command (async/chan))
 (defonce app-state
   (r/atom {:board (b/create-board 4 :shuffle)
            :size 4
@@ -66,25 +65,29 @@
       "© 2017 Charles L.G. Comstock "
       [:a {:href "https://github.com/dgtized/tile-game"} "(github)"]]]))
 
+(defn controller [command]
+  (go-loop []
+    (when-let [key (async/<! command)]
+      (slide! key))
+    (recur))
+  tile-grid)
+
 (def codename
   {37 :left
    39 :right
    38 :up
    40 :down})
 
-(defn handle-keydown [e]
-  (when-let [key (codename (.-keyCode e))]
-    (.preventDefault e)
-    (async/put! command key)))
+(defn handle-keydown [command]
+  (fn [e]
+    (when-let [key (codename (.-keyCode e))]
+      (.preventDefault e)
+      (async/put! command key))))
 
 (defn init []
-  ;; Rebind onkeydown with set! so figwheel can always update
-  (set! (.-onkeydown js/window) handle-keydown)
-  (r/render-component [tile-grid] (. js/document (getElementById "grid")))
-
-  (go-loop []
-    (when-let [key (async/<! command)]
-      (slide! key))
-    (recur)))
+  (let [command (async/chan)]
+    ;; Rebind onkeydown with set! so figwheel can always update
+    (set! (.-onkeydown js/window) (handle-keydown command))
+    (r/render-component [(controller command)] (. js/document (getElementById "grid")))))
 
 (init)
