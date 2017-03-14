@@ -18,15 +18,15 @@
            :analysis-mode false}))
 
 (defn new-board! [& args]
-  #(swap! app-state assoc :board (apply b/create-board args)))
+  (swap! app-state assoc :board (apply b/create-board (:size @app-state) args)))
 
 (defn slide! [arg]
   (swap! app-state update-in [:board] b/slide arg))
 
-(defn board-size-slider [size]
+(defn board-size-slider [size command]
   [:div
-   [:button {:on-click (new-board! size)} "Reset"]
-   [:button {:on-click (new-board! size :shuffle)} "Shuffle"]
+   [:button {:on-click #(async/put! command :reset)} "Reset"]
+   [:button {:on-click #(async/put! command :new-game)} "Shuffle"]
    [:label (str "Board size: " size)]
    [:input {:type "range" :style {:width "25%"}
             :value size :min 2 :max 8
@@ -51,7 +51,7 @@
         (let [tile (nth board (+ (* y dim) x))]
           (render-tile [x y] tile command)))]
      [:h4 (if (b/solved? board) "Solved!" "Slide tiles with arrow keys or clicking on tile")]
-     (board-size-slider size)
+     (board-size-slider size command)
      [:div
       [:label "Analysis Mode"]
       [:input {:type "checkbox" :checked analysis-mode
@@ -85,8 +85,10 @@
     (when-let [key (async/<! command)]
       (async/close! cancel)
       (let [new-cancel (async/chan 1)]
-        (if (= key :solve)
-          (playback-solution new-cancel 250)
+        (condp = key
+          :new-game (new-board! :shuffle)
+          :reset (new-board!)
+          :solve (playback-solution new-cancel 250)
           (slide! key))
         (recur new-cancel)))
     (recur cancel)))
@@ -100,6 +102,8 @@
    39 :right
    38 :up
    40 :down
+   78 :new-game
+   82 :reset
    83 :solve})
 
 (defn handle-keydown [command]
