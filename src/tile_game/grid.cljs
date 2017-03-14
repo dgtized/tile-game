@@ -1,6 +1,8 @@
 (ns tile-game.grid
   (:require [reagent.core :as r]
-            [tile-game.board :as b]))
+            [tile-game.board :as b]
+            [cljs.core.async :as async])
+  (:require-macros [cljs.core.async.macros :refer [go go-loop]]))
 
 (enable-console-print!)
 
@@ -10,6 +12,7 @@
           "#008000" "#00FF00" "#008080" "#00FFFF"
           "#0000C0" "#3030FF" "#800080" "#FF00FF"]))
 
+(defonce command (async/chan))
 (defonce app-state
   (r/atom {:board (b/create-board 4 :shuffle)
            :size 4
@@ -70,13 +73,18 @@
    40 :down})
 
 (defn handle-keydown [e]
-  (when-let [direction (codename (.-keyCode e))]
+  (when-let [key (codename (.-keyCode e))]
     (.preventDefault e)
-    (slide! direction)))
+    (async/put! command key)))
 
 (defn init []
   ;; Rebind onkeydown with set! so figwheel can always update
   (set! (.-onkeydown js/window) handle-keydown)
-  (r/render-component [tile-grid] (. js/document (getElementById "grid"))))
+  (r/render-component [tile-grid] (. js/document (getElementById "grid")))
+
+  (go-loop []
+    (when-let [key (async/<! command)]
+      (slide! key))
+    (recur)))
 
 (init)
