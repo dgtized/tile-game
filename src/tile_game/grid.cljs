@@ -68,7 +68,7 @@
       [:a {:href "https://github.com/dgtized/tile-game"} "(github)"]]]))
 
 (defn playback-solution [cancel delay]
-  (let [out (async/chan 30)]
+  (let [out (async/chan 256)] ;; max solution length to process
     (go-loop [[move & remaining] (b/solve-next (:board @app-state))]
       (if move
         (do
