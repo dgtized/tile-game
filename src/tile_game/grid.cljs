@@ -41,7 +41,7 @@
                :font-family "Verdana" :font-size 0.4 :text-anchor "middle"}
         (str tile)]])))
 
-(defn tile-grid []
+(defn tile-grid [run-solver]
   (let [{:keys [board size analysis-mode]} @app-state
         dim (b/dimension board)]
     [:center
@@ -60,7 +60,9 @@
       (when analysis-mode
         (if (b/solved? board)
           "Solved!"
-          (str "Suggested Moves: " (b/solve-next board))))]
+          [:div
+           (str "Suggested Moves: " (b/solve-next board))
+           [:div [:button {:on-click run-solver} "Run solver!"]]]))]
      [:p
       "© 2017 Charles L.G. Comstock "
       [:a {:href "https://github.com/dgtized/tile-game"} "(github)"]]]))
@@ -88,7 +90,7 @@
           (slide! key))
         (recur new-cancel)))
     (recur cancel))
-  tile-grid)
+  (fn [] (tile-grid #(async/put! command :solve))))
 
 (def codename
   {37 :left
