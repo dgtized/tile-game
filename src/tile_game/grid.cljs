@@ -80,7 +80,7 @@
         (async/close! out)))
     out))
 
-(defn controller [command]
+(defn ui-event-loop [command]
   (go-loop [cancel (async/chan 1)]
     (when-let [key (async/<! command)]
       (async/close! cancel)
@@ -89,7 +89,10 @@
           (playback-solution new-cancel 250)
           (slide! key))
         (recur new-cancel)))
-    (recur cancel))
+    (recur cancel)))
+
+(defn controller [command]
+  (ui-event-loop command)
   (fn [] (tile-grid command)))
 
 (def codename
