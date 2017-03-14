@@ -11,7 +11,7 @@
           "#0000C0" "#3030FF" "#800080" "#FF00FF"]))
 
 (defonce app-state
-  (r/atom {:board (b/create-board 4)
+  (r/atom {:board (b/create-board 4 :shuffle)
            :size 4
            :analysis-mode false}))
 
@@ -23,7 +23,7 @@
 
 (defn board-size-slider [size]
   [:div
-   [:button {:on-click (new-board! size)} "New Game"]
+   [:button {:on-click (new-board! size)} "Reset"]
    [:button {:on-click (new-board! size :shuffle)} "Shuffle"]
    [:label (str "Board size: " size)]
    [:input {:type "range" :style {:width "25%"}
