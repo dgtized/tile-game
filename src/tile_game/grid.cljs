@@ -41,6 +41,17 @@
                :font-family "Verdana" :font-size 0.4 :text-anchor "middle"}
         (str tile)]])))
 
+(defn help-screen []
+  [:table {:style {:width "25%"}}
+   [:tr [:th "Key"] [:th "Action"]]
+   [:tr [:td "Left"] [:td "Move blank tile left"]]
+   [:tr [:td "Right"] [:td "Move blank tile right"]]
+   [:tr [:td "Up"] [:td "Move blank tile up"]]
+   [:tr [:td "Down"] [:td "Move blank tile down"]]
+   [:tr [:td "N"] [:td "Shuffle Board"]]
+   [:tr [:td "R"] [:td "Reset Board"]]
+   [:tr [:td "S"] [:td "Solve next piece"]]])
+
 (defn tile-grid [command]
   (let [{:keys [board size analysis-mode]} @app-state
         dim (b/dimension board)]
@@ -63,6 +74,7 @@
           [:div
            (str "Suggested Moves: " (b/solve-next board))
            [:div [:button {:on-click #(async/put! command :solve)} "Run solver!"]]]))]
+     [:details [:summary "Help"] (help-screen)]
      [:p
       "© 2017 Charles L.G. Comstock "
       [:a {:href "https://github.com/dgtized/tile-game"} "(github)"]]]))
