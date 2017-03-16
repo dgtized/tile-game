@@ -79,18 +79,17 @@
       "© 2017 Charles L.G. Comstock "
       [:a {:href "https://github.com/dgtized/tile-game"} "(github)"]]]))
 
-(defn playback-solution [cancel delay]
-  (let [out (async/chan 256)] ;; max solution length to process
-    (go-loop [[move & remaining] (b/solve-next (:board @app-state))]
-      (if move
-        (do
-          (async/<! (async/timeout delay))
-          (let [[_ c] (async/alts! [cancel [out move]])]
-            (when (not= c cancel)
-              (slide! move)
-              (recur remaining))))
-        (async/close! out)))
-    out))
+(defn playback-solution
+  [cancel delay]
+  (go-loop [[move & remaining] (b/solve-next (:board @app-state))]
+    (if move
+      (do
+        (let [[_ c] (async/alts! [cancel (async/timeout delay)])]
+          (when (not= c cancel)
+            (slide! move)
+            (recur remaining))))
+      (async/close! cancel)))
+  cancel)
 
 (defn ui-event-loop [command]
   (go-loop [cancel (async/chan 1)]
