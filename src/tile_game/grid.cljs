@@ -79,9 +79,10 @@
       "© 2017 Charles L.G. Comstock "
       [:a {:href "https://github.com/dgtized/tile-game"} "(github)"]]]))
 
-(defn playback-solution
-  [cancel delay]
-  (go-loop [[move & remaining] (b/solve-next (:board @app-state))]
+(defn playback-moves
+  "Plays recorded moves to board with a delay and ability to cancel playback"
+  [moves cancel delay]
+  (go-loop [[move & remaining] moves]
     (if move
       (do
         (let [[_ c] (async/alts! [cancel (async/timeout delay)])]
@@ -99,7 +100,8 @@
         (condp = key
           :new-game (new-board! :shuffle)
           :reset (new-board!)
-          :solve (playback-solution new-cancel 250)
+          :solve (playback-moves (b/solve-next (:board @app-state))
+                                 new-cancel 250)
           (slide! key))
         (recur new-cancel)))
     (recur cancel)))
