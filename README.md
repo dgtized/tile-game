@@ -13,7 +13,27 @@ and thought this would be a nice project to dig my teeth into.
 
 ## Update March 2017
 
-Ported it to cross-compile to clojurescript for the browser.
+Ported it to cross-compile to clojurescript for the browser. Experimenting with
+using core.async instead of agents for playing back a solution asynchronously.
+This allows
+for
+[canceling in-process asynchronous](http://blog.lauripesonen.com/go-concurrency-patterns-in-core-async-pipelines-and-cancellation/) actions
+by blocking on read from a cancel or timeout channel before processing each
+event.
+
+```clojure
+(go-loop [[move & remaining] moves]
+  (if move
+    (do
+      (let [[_ c] (async/alts! [cancel (async/timeout delay)])]
+        (when (not= c cancel)
+          (slide! move)
+          (recur remaining))))
+    (async/close! cancel)))
+```
+
+In the main event loop any new events first close the cancel channel
+causing the go-loop above to exit.
 
 ## Local Usage
 
