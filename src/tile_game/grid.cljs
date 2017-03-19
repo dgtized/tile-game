@@ -106,10 +106,6 @@
         (recur new-cancel)))
     (recur cancel)))
 
-(defn controller [command]
-  (ui-event-loop command)
-  (fn [] (tile-grid command)))
-
 (def codename
   {37 :left
    39 :right
@@ -129,6 +125,7 @@
   (let [command (async/chan)]
     ;; Rebind onkeydown with set! so figwheel can always update
     (set! (.-onkeydown js/window) (handle-keydown command))
-    (r/render-component [(controller command)] (. js/document (getElementById "grid")))))
+    (ui-event-loop command)
+    (r/render-component [(fn [] (tile-grid command))] (. js/document (getElementById "grid")))))
 
 (init)
