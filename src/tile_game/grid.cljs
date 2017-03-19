@@ -43,14 +43,16 @@
 
 (defn help-screen []
   [:table {:style {:width "25%"}}
-   [:tr [:th "Key"] [:th "Action"]]
-   [:tr [:td "Left"] [:td "Move blank tile left"]]
-   [:tr [:td "Right"] [:td "Move blank tile right"]]
-   [:tr [:td "Up"] [:td "Move blank tile up"]]
-   [:tr [:td "Down"] [:td "Move blank tile down"]]
-   [:tr [:td "N"] [:td "Shuffle Board"]]
-   [:tr [:td "R"] [:td "Reset Board"]]
-   [:tr [:td "S"] [:td "Solve next piece"]]])
+   [:thead
+    [:tr [:th "Key"] [:th "Action"]]]
+   [:tbody
+    [:tr [:td "Left"] [:td "Move blank tile left"]]
+    [:tr [:td "Right"] [:td "Move blank tile right"]]
+    [:tr [:td "Up"] [:td "Move blank tile up"]]
+    [:tr [:td "Down"] [:td "Move blank tile down"]]
+    [:tr [:td "N"] [:td "Shuffle Board"]]
+    [:tr [:td "R"] [:td "Reset Board"]]
+    [:tr [:td "S"] [:td "Solve next piece"]]]])
 
 (defn tile-grid [command]
   (let [{:keys [board size analysis-mode]} @app-state
