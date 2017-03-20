@@ -28,9 +28,9 @@
    [:button {:on-click #(async/put! command :reset)} "Reset"]
    [:button {:on-click #(async/put! command :new-game)} "Shuffle"]
    [:label (str "Board size: " size)]
-   [:input {:type "range" :style {:width "25%"}
-            :value size :min 2 :max 8
-            :on-change (fn [e] (swap! app-state assoc :size (.-target.value e)))}]])
+   [:input {:type "range" :value size :min 2 :max 8
+            :on-change (fn [e] (swap! app-state assoc :size (.-target.value e)))
+            :style {:width "25%"}}]])
 
 (defn render-tile [[x y] tile command]
   (if-not (zero? tile)
