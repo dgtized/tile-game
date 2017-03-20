@@ -14,14 +14,19 @@
 
 (defonce app-state
   (r/atom {:board (b/create-board 4 :shuffle)
+           :moves []
            :size 4
            :analysis-mode false}))
 
 (defn new-board! [& args]
-  (swap! app-state assoc :board (apply b/create-board (:size @app-state) args)))
+  (swap! app-state assoc
+         :board (apply b/create-board (:size @app-state) args)
+         :moves []))
 
 (defn slide! [arg]
-  (swap! app-state update-in [:board] b/slide arg))
+  (swap! app-state assoc
+         :board (b/slide (:board @app-state) arg)
+         :moves (conj (:moves @app-state) arg))) ; note this appends direction or tile
 
 (defn board-size-slider [size command]
   [:div
@@ -55,7 +60,7 @@
     [:tr [:td "S"] [:td "Solve next piece"]]]])
 
 (defn tile-grid [command]
-  (let [{:keys [board size analysis-mode]} @app-state
+  (let [{:keys [board size analysis-mode moves]} @app-state
         dim (b/dimension board)]
     [:center
      [:h1 "Tile Puzzle"]
@@ -64,6 +69,7 @@
         (let [tile (nth board (+ (* y dim) x))]
           (render-tile [x y] tile command)))]
      [:h4 (if (b/solved? board) "Solved!" "Slide tiles with arrow keys or clicking on tile")]
+     [:details [:summary (str (count moves) " moves.")] (str moves)]
      (board-size-slider size command)
      [:div
       [:label "Analysis Mode"]
