@@ -11,6 +11,14 @@ no planning ability.  It was a very heuristic heavy solution, and I
 always wanted to improve on it.  Recently I decided to learn Clojure
 and thought this would be a nice project to dig my teeth into.
 
+### Commands
+
+ - *Arrow keys* move the empty tile.
+ - *R* randomizes the tiles for the current dimension
+ - *S* will execute solve-next which is a heuristic based solver which
+  does not actually complete.
+ - *Q* will quit
+
 ## Update March 2017
 
 Ported it to cross-compile to clojurescript for the browser. Experimenting with
@@ -46,14 +54,6 @@ For web client
     lein figwheel
 
 visit http://localhost:3449
-
-### Commands
-
- - *Arrow keys* move the empty tile.
- - *R* randomizes the tiles for the current dimension
- - *S* will execute solve-next which is a heuristic based solver which
-  does not actually complete.
- - *Q* will quit
 
 ## Note/Disclaimer
 
