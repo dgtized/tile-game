@@ -9,6 +9,10 @@
   :plugins [[lein-figwheel "0.5.9"]
             [lein-cljsbuild "1.1.5"]]
   :sources-paths ["src"]
+  :profiles {:dev {:dependencies [[com.cemerick/piggieback "0.2.1"]
+                                  [figwheel-sidecar "0.5.8"]]
+                   :source-paths ["cljs_src" "dev"] }}
+  :repl-options {:nrepl-middleware [cemerick.piggieback/wrap-cljs-repl]}
   :clean-targets ^{:protect false}
   ["resources/public/js/out"
    "resources/public/js/release"
