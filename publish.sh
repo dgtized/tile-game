@@ -1,9 +1,8 @@
 #!/bin/bash -e
 
-lein clean
-lein cljsbuild once release
-
 rm -rf resources/public/.git
+lein do clean, cljsbuild once release
+
 pushd resources/public
 git init
 git add .
