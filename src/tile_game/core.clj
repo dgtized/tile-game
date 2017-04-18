@@ -1,6 +1,7 @@
 (ns tile-game.core
   (:use [tile-game board])
-  (:require [clojure.core.async :as a])
+  (:require [clojure.core.async :as a]
+            [tile-game.graphics :refer [colors]])
   (:import [javax.swing JFrame JPanel]
            [java.awt Color Graphics Graphics2D Dimension Font]
            [java.awt.event KeyAdapter KeyEvent]))
@@ -9,14 +10,11 @@
 
 (def scale 150)
 
-(def colors [Color/RED Color/ORANGE Color/YELLOW Color/GREEN
-             Color/BLUE Color/CYAN Color/GRAY Color/PINK])
-
 (defn render-tile [#^Graphics g board [x y]]
   (let [tile (coords->tile board [x y])
         color (if (= tile 0)
                 Color/WHITE
-                (colors (rem tile (count colors))))
+                (Color/decode (nth colors tile)))
         [cx cy] [(* x scale) (* y scale)]]
        (doto g
          (.setColor color)

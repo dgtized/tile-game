@@ -1,16 +1,11 @@
 (ns tile-game.grid
   (:require [reagent.core :as r]
             [tile-game.board :as b]
+            [tile-game.graphics :refer [colors]]
             [cljs.core.async :as async])
   (:require-macros [cljs.core.async.macros :refer [go go-loop]]))
 
 (enable-console-print!)
-
-(def colors
-  (cycle ["#00B000" "#808080" "#C0C0C0" "#3030B0"
-          "#800000" "#FF0000" "#808000" "#FFFF00"
-          "#008000" "#00FF00" "#008080" "#00FFFF"
-          "#0000C0" "#3030FF" "#800080" "#FF00FF"]))
 
 (defonce app-state
   (r/atom {:board (b/create-board 4 :shuffle)
