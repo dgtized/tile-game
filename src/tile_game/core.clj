@@ -20,7 +20,7 @@
          (.setColor color)
          (.fillRect cx cy scale scale)
          (.setColor Color/BLACK)
-         (.setFont (Font. "Serif" (. Font PLAIN) 32)))
+         (.setFont (Font. "Serif" (Font/PLAIN) 32)))
        (when (> tile 0) (.drawString g (format "%d" tile)
                                      (int (+ cx (quot scale 2)))
                                      (int (+ cy (quot scale 2)))))))
