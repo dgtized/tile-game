@@ -82,7 +82,7 @@
       (recur (apply assoc dmap costs)
              next
              (set/union seen coords)
-             (+ cost 1)))))
+             (inc cost)))))
 
 (defn distance-map [board goal avoid]
   (dijkstra-map (vec (repeat (count board) (count board)))
@@ -127,12 +127,12 @@
   (= (count board) (count (solved-tiles board))))
 
 (defn goal-coord [board tile]
-  (index->coords board (- (if (= tile 0)
-                            (count board)
-                            tile) 1)))
+  (index->coords board (dec (if (= tile 0)
+                              (count board)
+                              tile))))
 
 (defn last-on-row? [board [x y]]
-  (= x (- (dimension board) 1)))
+  (= x (dec (dimension board))))
 
 (defn move-sequence [board [tile goal solved] & more]
   (let [path (move-to board tile goal solved)]
@@ -148,11 +148,11 @@
       (if (last-on-row? board goal)
         (let [row-min (coords->tile board [0 y])]
           (move-sequence board
-                         [tile [x (+ y 1)] solved]
+                         [tile [x (inc y)] solved]
                          [0 [0 y] (conj (disj solved row-min) tile)]
                          [0 [x y] #{}]
                          [tile [x y] solved]
-                         [0 [(- x 1) y] #{tile}]
+                         [0 [(dec x) y] #{tile}]
                          [row-min [0 y] #{tile}]
                          ))
         (move-to board tile goal solved)))))
@@ -160,5 +160,5 @@
 (defn solve-next [board]
   (if (solved? board)
     []
-    (let [next (+ 1 (count (solved-tiles board)))]
+    (let [next (inc (count (solved-tiles board)))]
       (solve-tile board next))))
