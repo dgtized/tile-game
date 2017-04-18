@@ -72,8 +72,6 @@
     render))
 
 (defn -main [& [num]]
-  (if num (start-gui (Integer/parseInt num))
-      (start-gui 4))
-  nil)
+  (start-gui))
 
 ;(def slide! (main 5))
