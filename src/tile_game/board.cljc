@@ -56,8 +56,8 @@
         pos (tile->index board tile)]
     (if (some #{tile} (adjacent-tiles board 0))
       (assoc board
-        empty-pos tile
-        pos 0)
+             empty-pos tile
+             pos 0)
       board)))
 
 (defn slide-direction [board direction]
