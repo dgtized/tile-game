@@ -1,4 +1,6 @@
-(ns tile-game.coordinates)
+(ns tile-game.coordinates
+  (:require [clojure.spec :as s]
+            [clojure.spec.gen :as gen]))
 
 (defn ^:private abs
   [x]
@@ -13,6 +15,8 @@
 (defn add [[x y] [dx dy]]
   [(+ x dx) (+ y dy)])
 
+(s/def ::point (s/tuple int? int?))
+(comment (gen/sample (s/gen ::point)))
 (defn adjacent-to
   "Lists adjacent coordinates in clockwise order"
   [p]
