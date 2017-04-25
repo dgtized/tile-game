@@ -1,7 +1,7 @@
 (ns tile-game.board
   (:require [tile-game.coordinates :as coords]
             [clojure.set :as set]
-            [clojure.string :as s]))
+            [clojure.string :as string]))
 
 (defn create-board [dim & opt]
   (let [board (vec (concat (range 1 (* dim dim)) '(0)))]
@@ -19,7 +19,7 @@
 
 ;; (defn print-board [board]
 ;;   (let [dim (dimension board)
-;;         fmt (s/join " " (repeat dim "%3d"))]
+;;         fmt (string/join " " (repeat dim "%3d"))]
 ;;     (doseq [row (partition dim board)]
 ;;       (apply printf (cons (str fmt "\n") row)))))
 
