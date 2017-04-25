@@ -9,9 +9,9 @@
   :plugins [[lein-figwheel "0.5.10"]
             [lein-cljsbuild "1.1.5" :exclusions [[org.clojure/clojure]]]]
   :sources-paths ["src"]
-  :profiles {:dev {:dependencies [[binaryage/devtools "0.9.3"]
+  :profiles {:dev {:dependencies [[binaryage/devtools "0.9.4"]
                                   [com.cemerick/piggieback "0.2.1"]
-                                  [figwheel-sidecar "0.5.9"]]
+                                  [figwheel-sidecar "0.5.10"]]
                    :source-paths ["src" "dev"] }}
   :repl-options {:nrepl-middleware [cemerick.piggieback/wrap-cljs-repl]}
   :clean-targets ^{:protect false}
