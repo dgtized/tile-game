@@ -1,7 +1,9 @@
 (ns tile-game.board
   (:require [tile-game.coordinates :as coords]
             [clojure.set :as set]
-            [clojure.string :as string]))
+            [clojure.string :as string]
+            [clojure.spec :as s]
+            [clojure.spec.gen :as gen]))
 
 (defn create-board [dim & opt]
   (let [board (vec (concat (range 1 (* dim dim)) '(0)))]
@@ -9,6 +11,7 @@
       (shuffle board)
       board)))
 
+(def direction? #{:up :down :left :right})
 (def dir-delta {:up    [ 0 -1]
                 :down  [ 0  1]
                 :left  [-1  0]
@@ -59,6 +62,10 @@
              empty-pos tile
              pos 0)
       board)))
+
+(s/def ::direction direction?)
+(comment
+  (gen/sample (s/gen ::direction)))
 
 (defn slide-direction [board direction]
   (let [current-pos (tile->coords board 0)

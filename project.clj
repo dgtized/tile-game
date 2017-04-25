@@ -2,7 +2,7 @@
   :description "A Tile Puzzle Game and Solver"
   :min-lein-version "2.0.0"
   :main tile-game.core
-  :dependencies [[org.clojure/clojure "1.8.0"]
+  :dependencies [[org.clojure/clojure "1.9.0-alpha15"]
                  [org.clojure/clojurescript "1.9.521"]
                  [org.clojure/core.async "0.3.442"]
                  [reagent "0.6.1"]]
@@ -11,6 +11,7 @@
   :sources-paths ["src"]
   :profiles {:dev {:dependencies [[binaryage/devtools "0.9.4"]
                                   [com.cemerick/piggieback "0.2.1"]
+                                  [org.clojure/test.check "0.9.0" :scope "test"]
                                   [figwheel-sidecar "0.5.10"]]
                    :source-paths ["src" "dev"] }}
   :repl-options {:nrepl-middleware [cemerick.piggieback/wrap-cljs-repl]}
