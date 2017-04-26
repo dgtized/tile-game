@@ -15,7 +15,8 @@
 (defn add [[x y] [dx dy]]
   [(+ x dx) (+ y dy)])
 
-(s/def ::point (s/tuple int? int?))
+(s/def ::coordinate (s/and int? pos?))
+(s/def ::point (s/tuple ::coordinate ::coordinate))
 (comment (gen/sample (s/gen ::point)))
 (defn adjacent-to
   "Lists adjacent coordinates in clockwise order"
