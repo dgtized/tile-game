@@ -63,10 +63,6 @@
              pos 0)
       board)))
 
-(s/def ::direction direction?)
-(comment
-  (gen/sample (s/gen ::direction)))
-
 (defn slide-direction [board direction]
   (let [current-pos (tile->coords board 0)
         new-pos (coords/add (dir-delta direction) current-pos)]
