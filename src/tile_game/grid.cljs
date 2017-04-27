@@ -32,6 +32,12 @@
             :on-change (fn [e] (swap! app-state assoc :size (.-target.value e)))
             :style {:width "25%"}}]])
 
+(defn render-board [board dim commmand]
+  [:svg {:view-box (str "0 0 " dim " " dim) :width 800 :height 800}
+   (for [x (range dim) y (range dim)]
+     (let [tile (nth board (+ (* y dim) x))]
+       (render-tile [x y] tile command)))])
+
 (defn render-tile [[x y] tile command]
   (if-not (zero? tile)
     (let [fill-color (nth colors tile)]
@@ -59,10 +65,7 @@
         dim (b/dimension board)]
     [:center
      [:h1 "Tile Puzzle"]
-     [:svg {:view-box (str "0 0 " dim " " dim) :width 800 :height 800}
-      (for [x (range dim) y (range dim)]
-        (let [tile (nth board (+ (* y dim) x))]
-          (render-tile [x y] tile command)))]
+     (render-board board dim command)
      [:h4 (if (b/solved? board) "Solved!" "Slide tiles with arrow keys or clicking on tile")]
      [:details [:summary (str (count moves) " moves.")] (str moves)]
      (board-size-slider size command)
