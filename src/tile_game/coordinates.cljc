@@ -15,9 +15,12 @@
 (defn add [[x y] [dx dy]]
   [(+ x dx) (+ y dy)])
 
+(s/def ::coord-delta #{-1 0 1})
+(s/def ::delta (s/tuple ::coord-delta ::coord-delta))
 (s/def ::coordinate (s/and int? pos?))
 (s/def ::point (s/tuple ::coordinate ::coordinate))
-(comment (gen/sample (s/gen ::point)))
+(comment (gen/sample (s/gen ::point))
+         (gen/sample (s/gen ::delta)))
 (defn adjacent-to
   "Lists adjacent coordinates in clockwise order"
   [p]
