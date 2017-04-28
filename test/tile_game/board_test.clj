@@ -33,16 +33,15 @@
 
 (deftest slide-a-direction
   (are [arg result] (= (slide a-board arg) result)
-       0      a-board
-       :up    a-board-2
-       :down  a-board-7
-       :right a-board-5
-       :left  a-board-4
-       2      a-board-2
-       5      a-board-5
-       4      a-board-4
-       7      a-board-7
-       ))
+    0      a-board
+    :up    a-board-2
+    :down  a-board-7
+    :right a-board-5
+    :left  a-board-4
+    2      a-board-2
+    5      a-board-5
+    4      a-board-4
+    7      a-board-7))
 
 (deftest distance-mapper
   (is (= [0 1 2 1 9 3 2 3 4] (distance-map a-board [0 0] #{0})))
