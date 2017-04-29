@@ -26,10 +26,10 @@
 
 (deftest coordinates
   (are [tile coord]
-       (= (tile->coords a-board tile) coord)
-       1 [0 0] 2 [1 0] 3 [2 0]
-       4 [0 1] 0 [1 1] 5 [2 1]
-       6 [0 2] 7 [1 2] 8 [2 2]))
+      (= (tile->coords a-board tile) coord)
+    1 [0 0] 2 [1 0] 3 [2 0]
+    4 [0 1] 0 [1 1] 5 [2 1]
+    6 [0 2] 7 [1 2] 8 [2 2]))
 
 (deftest slide-a-direction
   (are [arg result] (= (slide a-board arg) result)
