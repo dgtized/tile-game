@@ -47,12 +47,17 @@
     4      a-board-4
     7      a-board-7))
 
-(deftest legal-directions
-  (are [arg result] (= (legal-direction? a-board-2 arg) result)
+(deftest legal-moves
+  (are [arg result] (= (legal-move? a-board-2 arg) result)
     :up false
     :down true
     :right true
-    :left true))
+    :left true
+    0 false
+    1 true
+    2 true
+    3 true
+    4 false))
 
 (deftest distance-mapper
   (is (= [0 1 2 1 9 3 2 3 4] (distance-map a-board [0 0] #{0})))

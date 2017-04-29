@@ -54,9 +54,11 @@
   (map (partial coords->tile board)
        (adjacent-coords board (tile->coords board tile))))
 
-(defn legal-direction? [board direction]
-  (bounded-coords? board (coords/add (tile->coords board 0)
-                                     (dir-delta direction))))
+(defn legal-move? [board arg]
+  (cond
+    (direction? arg)
+    (bounded-coords? board (coords/add (tile->coords board 0) (dir-delta arg)))
+    :else (boolean (some #{arg} (adjacent-tiles board 0)))))
 
 (defn slide-tile [board tile]
   (let [empty-pos (tile->index board 0)
