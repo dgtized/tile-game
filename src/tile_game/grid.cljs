@@ -34,12 +34,6 @@
             :on-change (fn [e] (swap! app-state assoc :size (.-target.value e)))
             :style {:width "25%"}}]])
 
-(defn render-board [board dim commmand]
-  [:svg {:view-box (str "0 0 " dim " " dim) :width 800 :height 800}
-   (for [x (range dim) y (range dim)]
-     (let [tile (nth board (+ (* y dim) x))]
-       (render-tile [x y] tile command)))])
-
 (defn render-tile [[x y] tile command]
   (if-not (zero? tile)
     (let [fill-color (nth colors tile)]
@@ -48,6 +42,12 @@
        [:text {:x (+ 0.5 x) :y (+ 0.65 y)
                :font-family "Verdana" :font-size 0.4 :text-anchor "middle"}
         (str tile)]])))
+
+(defn render-board [board dim command]
+  [:svg {:view-box (str "0 0 " dim " " dim) :width 800 :height 800}
+   (for [x (range dim) y (range dim)]
+     (let [tile (nth board (+ (* y dim) x))]
+       (render-tile [x y] tile command)))])
 
 (defn help-screen []
   [:table {:style {:width "25%"}}
