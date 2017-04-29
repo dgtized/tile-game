@@ -56,6 +56,11 @@
 (defn direction->coords [board arg]
   (coords/add (tile->coords board 0) (dir-delta arg)))
 
+(defn direction->tile [board direction]
+  (let [pos (direction->coords board direction)]
+    (when (bounded-coords? board pos)
+      (coords->tile board pos))))
+
 (defn legal-move? [board arg]
   (cond
     (direction? arg) (bounded-coords? board (direction->coords board arg))

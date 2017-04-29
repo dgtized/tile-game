@@ -59,6 +59,14 @@
     3 true
     4 false))
 
+(deftest tile-direction
+  (are [direction result]
+      (= (direction->tile a-board-2 direction) result)
+    :up nil
+    :down 2
+    :right 3
+    :left 1))
+
 (deftest distance-mapper
   (is (= [0 1 2 1 9 3 2 3 4] (distance-map a-board [0 0] #{0})))
   (is (= [9 9 9 9 9 9 9 9 9] (distance-map a-board [0 0] #{1}))))
