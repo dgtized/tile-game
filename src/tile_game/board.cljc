@@ -76,10 +76,9 @@
       board)))
 
 (defn slide-direction [board direction]
-  (let [new-pos (direction->coords board direction)]
-    (if (bounded-coords? board new-pos)
-      (slide-tile board (coords->tile board new-pos))
-      board)))
+  (if-let [tile (direction->tile board direction)]
+    (slide-tile board tile)
+    board))
 
 (defn slide [board arg]
   (if (direction? arg)
