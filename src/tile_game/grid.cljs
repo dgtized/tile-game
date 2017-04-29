@@ -19,9 +19,11 @@
          :moves []))
 
 (defn slide! [arg]
-  (swap! app-state assoc
-         :board (b/slide (:board @app-state) arg)
-         :moves (conj (:moves @app-state) arg))) ; note this appends direction or tile
+  (let [{:keys [board moves]} @app-state]
+    (when (b/legal-move? board arg)
+      (swap! app-state assoc
+             :board (b/slide board arg)
+             :moves (conj moves arg))))) ; note this appends direction or tile
 
 (defn board-size-slider [size command]
   [:div
