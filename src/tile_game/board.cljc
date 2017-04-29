@@ -1,8 +1,7 @@
 (ns tile-game.board
   (:require [tile-game.coordinates :as coords]
             [clojure.set :as set]
-            [clojure.string :as string]
-            [clojure.spec :as s]))
+            [clojure.string :as string]))
 
 (defn create-board [dim & opt]
   (let [board (vec (concat (range 1 (* dim dim)) '(0)))]
