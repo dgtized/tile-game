@@ -10,11 +10,11 @@
       (shuffle board)
       board)))
 
-(def direction? #{:up :down :left :right})
 (def dir-delta {:up    [ 0 -1]
                 :down  [ 0  1]
                 :left  [-1  0]
                 :right [ 1  0]})
+(def direction? (set (keys dir-delta)))
 
 (defn dimension [board]
   (int (Math/sqrt (count board))))
@@ -77,7 +77,7 @@
       board)))
 
 (defn slide [board arg]
-  (if (contains? dir-delta arg)
+  (if (direction? arg)
     (slide-direction board arg)
     (slide-tile board arg)))
 
