@@ -50,7 +50,7 @@
 (defn adjacent-coords [board p]
   (filter (partial bounded-coords? board) (coords/adjacent-to p)))
 
-(defn- adjacent-tiles [board tile]
+(defn adjacent-tiles [board tile]
   (map (partial coords->tile board)
        (adjacent-coords board (tile->coords board tile))))
 

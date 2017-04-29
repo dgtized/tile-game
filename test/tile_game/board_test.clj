@@ -31,6 +31,10 @@
     4 [0 1] 0 [1 1] 5 [2 1]
     6 [0 2] 7 [1 2] 8 [2 2]))
 
+(deftest tile-adjacency
+  (is (= '(2 5 7 4) (adjacent-tiles a-board 0)))
+  (is (= '(3 2 1) (adjacent-tiles a-board-2 0))))
+
 (deftest slide-a-direction
   (are [arg result] (= (slide a-board arg) result)
     0      a-board
