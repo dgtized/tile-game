@@ -3,7 +3,8 @@
             [clojure.test :refer :all]))
 
 (deftest adjacency-list
-  (is (= (adjacent-to [1 1]) '([1 0] [2 1] [1 2] [0 1]))))
+  (is (= (adjacent-to [1 1])
+         '([1 0] [2 1] [1 2] [0 1]))))
 
 (deftest circumfrence-coordinates
   (is (= (circumfrence [0 0] [1 1])
@@ -13,10 +14,8 @@
   (is (= (circumfrence [0 0] [0 1])
          '([0 1] [0 0])))
   (is (= (circumfrence [0 0] [2 2])
-         '([1 0] [2 0]
-             [2 1] [2 2]
-               [1 2] [0 2]
-                 [0 1] [0 0]))))
+         '([1 0] [2 0] [2 1] [2 2]
+           [1 2] [0 2] [0 1] [0 0]))))
 
 (deftest closest-adjacent-coordinates
   (is (= (closest-adjacent [0 0] [0 0]) [0 0]))

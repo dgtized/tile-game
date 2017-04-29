@@ -17,14 +17,14 @@
                 Color/WHITE
                 (Color/decode (nth colors tile)))
         [cx cy] [(* x scale) (* y scale)]]
-       (doto g
-         (.setColor color)
-         (.fillRect cx cy scale scale)
-         (.setColor Color/BLACK)
-         (.setFont (Font. "Serif" (Font/PLAIN) 32)))
-       (when (> tile 0) (.drawString g (format "%d" tile)
-                                     (int (+ cx (quot scale 2)))
-                                     (int (+ cy (quot scale 2)))))))
+    (doto g
+      (.setColor color)
+      (.fillRect cx cy scale scale)
+      (.setColor Color/BLACK)
+      (.setFont (Font. "Serif" (Font/PLAIN) 32)))
+    (when (> tile 0) (.drawString g (format "%d" tile)
+                                  (int (+ cx (quot scale 2)))
+                                  (int (+ cy (quot scale 2)))))))
 
 (def board (ref (b/create-board 4 :shuffle)))
 
