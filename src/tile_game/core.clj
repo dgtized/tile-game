@@ -1,7 +1,8 @@
 (ns tile-game.core
-  (:use [tile-game board])
   (:require [clojure.core.async :as a]
-            [tile-game.graphics :refer [colors]])
+            [tile-game.graphics :refer [colors]]
+            [tile-game.board :as b]
+            [tile-game.solver :as solve])
   (:import [javax.swing JFrame JPanel]
            [java.awt Color Graphics Graphics2D Dimension Font]
            [java.awt.event KeyAdapter KeyEvent]))
@@ -11,7 +12,7 @@
 (def scale 150)
 
 (defn render-tile [#^Graphics g board [x y]]
-  (let [tile (coords->tile board [x y])
+  (let [tile (b/coords->tile board [x y])
         color (if (= tile 0)
                 Color/WHITE
                 (Color/decode (nth colors tile)))
@@ -25,10 +26,10 @@
                                      (int (+ cx (quot scale 2)))
                                      (int (+ cy (quot scale 2)))))))
 
-(def board (ref (create-board 4 :shuffle)))
+(def board (ref (b/create-board 4 :shuffle)))
 
 (defn shuffle-board! [dim render]
-  (dosync (ref-set board (create-board dim :shuffle)))
+  (dosync (ref-set board (b/create-board dim :shuffle)))
   (a/put! render :render))
 
 (defn slide!
@@ -36,12 +37,12 @@
   (prn :slide! moves)
   (a/go
     (doseq [piece moves]
-      (dosync (alter board slide piece))
+      (dosync (alter board b/slide piece))
       (a/>! render :render)
       (Thread/sleep 150))))
 
 (defn start-gui []
-  (let [dim (dimension @board)
+  (let [dim (b/dimension @board)
         size (* dim scale)
         #^JFrame frame (JFrame.)
         #^JPanel panel (proxy [JPanel] []
@@ -62,7 +63,7 @@
              KeyEvent/VK_DOWN  (slide! render :down)
              KeyEvent/VK_Q     (do (.dispose #^JFrame frame) (a/close! render))
              KeyEvent/VK_R     (shuffle-board! dim render)
-             KeyEvent/VK_S     (apply slide! (cons render (solve-next @board)))
+             KeyEvent/VK_S     (apply slide! (cons render (solve/solve-next @board)))
              true)))))
     (doto frame (.setContentPane panel) .pack .show)
     (a/go (while (a/<! render)

@@ -1,7 +1,5 @@
 (ns tile-game.board
-  (:require [tile-game.coordinates :as coords]
-            [clojure.set :as set]
-            [clojure.string :as string]))
+  (:require [tile-game.coordinates :as coords]))
 
 (defn create-board [dim & opt]
   (let [board (vec (concat (range 1 (* dim dim)) '(0)))]
@@ -84,93 +82,8 @@
     (slide-direction board arg)
     (slide-tile board arg)))
 
-(defn dijkstra-map [dmap coords seen cost]
-  (if (empty? (set/difference coords seen))
-    dmap
-    (let [costs (mapcat #(list (coords->index dmap %) cost) coords)
-          edges (reduce set/union #{}
-                        (map #(set (adjacent-coords dmap %)) coords))
-          next (set/difference edges seen)]
-      (recur (apply assoc dmap costs)
-             next
-             (set/union seen coords)
-             (inc cost)))))
-
-(defn distance-map [board goal avoid]
-  (dijkstra-map (vec (repeat (count board) (count board)))
-                (set (list goal))
-                (set (map (partial tile->coords board) avoid))
-                0))
-
 (defn impassable? [board dist-map tile]
   (> (nth dist-map (tile->index board tile)) (* 2 (dimension board))))
 
 (defn tile-at-coord? [board tile coord]
   (= (tile->coords board tile) coord))
-
-(defn ranked-moves [board dist-map tile avoid]
-  (if (impassable? board dist-map tile)
-    nil
-    (let [moves (set/difference (set (adjacent-tiles board tile)) avoid)]
-      (sort-by #(nth dist-map (tile->index board %)) moves))))
-
-(defn move-to [board tile goal & [avoid]]
-  (let [dist-map (distance-map board goal avoid)]
-    (loop [path '() board board]
-      (if (tile-at-coord? board tile goal)
-        path
-        (when-let [best-move (first (ranked-moves board dist-map tile avoid))]
-          (when-let [moves (if (= tile 0)
-                             (list best-move)
-                             (when-let [zero-path
-                                        (move-to board 0
-                                                 (tile->coords board best-move)
-                                                 (conj (set avoid) tile))]
-                               (concat zero-path (list tile))))]
-            (recur (concat path moves)
-                   (reduce slide-tile board moves))))))))
-
-(defn solved-tiles [board]
-  (let [solution (create-board (dimension board))]
-    (take-while #(not (nil? %))
-                (map #(if (= %1 %2) %1 nil) board solution))))
-
-(defn solved? [board]
-  (= (count board) (count (solved-tiles board))))
-
-(defn goal-coord [board tile]
-  (index->coords board (dec (if (= tile 0)
-                              (count board)
-                              tile))))
-
-(defn last-on-row? [board [x y]]
-  (= x (dec (dimension board))))
-
-(defn move-sequence [board [tile goal solved] & more]
-  (let [path (move-to board tile goal solved)]
-    (if (empty? more)
-      path
-      (concat path (apply move-sequence (reduce slide-tile board path) more)))))
-
-(defn solve-tile [board tile]
-  (let [solved (set (solved-tiles board))
-        [x y :as goal] (goal-coord board tile)]
-    (if (solved tile)
-      '()
-      (if (last-on-row? board goal)
-        (let [row-min (coords->tile board [0 y])]
-          (move-sequence board
-                         [tile [x (inc y)] solved]
-                         [0 [0 y] (conj (disj solved row-min) tile)]
-                         [0 [x y] #{}]
-                         [tile [x y] solved]
-                         [0 [(dec x) y] #{tile}]
-                         [row-min [0 y] #{tile}]
-                         ))
-        (move-to board tile goal solved)))))
-
-(defn solve-next [board]
-  (if (solved? board)
-    []
-    (let [next (inc (count (solved-tiles board)))]
-      (solve-tile board next))))

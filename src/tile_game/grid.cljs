@@ -2,6 +2,7 @@
   (:require [reagent.core :as r]
             [tile-game.board :as b]
             [tile-game.graphics :refer [colors]]
+            [tile-game.solver :as solve]
             [cljs.core.async :as async])
   (:require-macros [cljs.core.async.macros :refer [go go-loop]]))
 
@@ -71,7 +72,7 @@
     [:center
      [:h1 "Tile Puzzle"]
      (render-board board dim command)
-     [:h4 (if (b/solved? board) "Solved!" "Slide tiles with arrow keys or clicking on tile")]
+     [:h4 (if (solve/solved? board) "Solved!" "Slide tiles with arrow keys or clicking on tile")]
      [:details [:summary (str (count moves) " moves.")] (str moves)]
      (board-size-slider size command)
      [:div
@@ -80,10 +81,10 @@
                :on-click #(swap! app-state update-in [:analysis-mode] not)}]
       [:br]
       (when analysis-mode
-        (if (b/solved? board)
+        (if (solve/solved? board)
           "Solved!"
           [:div
-           (str "Suggested Moves: " (b/solve-next board))
+           (str "Suggested Moves: " (solve/solve-next board))
            [:div [:button {:on-click #(async/put! command :solve)} "Run solver!"]]]))]
      [:details [:summary "Help"] (help-screen)]
      [:p
@@ -111,7 +112,7 @@
         (condp = key
           :new-game (new-board! :shuffle)
           :reset (new-board!)
-          :solve (playback-moves (b/solve-next (:board @app-state))
+          :solve (playback-moves (solve/solve-next (:board @app-state))
                                  new-cancel 250)
           (slide! key))
         (recur new-cancel)))
