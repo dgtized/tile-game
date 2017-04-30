@@ -50,7 +50,7 @@
 (defn render-board [board dim command]
   [:svg {:view-box (str "0 0 " dim " " dim) :width 800 :height 800}
    (for [x (range dim) y (range dim)]
-     (let [tile (nth board (+ (* y dim) x))]
+     (let [tile (b/coords->tile board [x y])]
        (render-tile [x y] tile command)))])
 
 (defn help-screen []
