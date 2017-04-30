@@ -58,7 +58,7 @@
 
 (defn solved-tiles [board]
   (let [solution (b/create-board (b/dimension board))]
-    (take-while #(not (nil? %))
+    (take-while (comp not nil?)
                 (map #(if (= %1 %2) %1 nil) board solution))))
 
 (defn solve-tile [board tile]
