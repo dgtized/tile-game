@@ -1,7 +1,8 @@
 (ns tile-game.board-test
-  (:require [tile-game.board :as b]
-            [clojure.test :refer :all]
-            [tile-game.fixtures :refer :all]))
+  (:require [clojure.test :refer :all]
+            [tile-game
+             [board :as b]
+             [fixtures :refer :all]]))
 
 (deftest coordinates
   (are [tile coord]

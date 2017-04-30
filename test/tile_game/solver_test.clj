@@ -1,8 +1,9 @@
 (ns tile-game.solver-test
-  (:require [tile-game.solver :as solve]
-            [clojure.test :refer :all]
-            [tile-game.fixtures :refer :all]
-            [tile-game.board :as b]))
+  (:require [clojure.test :refer :all]
+            [tile-game
+             [board :as b]
+             [fixtures :refer :all]
+             [solver :as solve]]))
 
 (deftest is-solved
   (is (solve/solved? (b/create-board 3)))

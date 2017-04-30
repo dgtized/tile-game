@@ -1,10 +1,10 @@
 (ns tile-game.grid
-  (:require [reagent.core :as r]
+  (:require [cljs.core.async :as async]
+            [reagent.core :as r]
             [tile-game.board :as b]
             [tile-game.graphics :refer [colors]]
-            [tile-game.solver :as solve]
-            [cljs.core.async :as async])
-  (:require-macros [cljs.core.async.macros :refer [go go-loop]]))
+            [tile-game.solver :as solve])
+  (:require-macros [cljs.core.async.macros :refer [go-loop]]))
 
 (enable-console-print!)
 

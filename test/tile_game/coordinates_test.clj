@@ -1,6 +1,6 @@
 (ns tile-game.coordinates-test
-  (:require [tile-game.coordinates :refer :all]
-            [clojure.test :refer :all]))
+  (:require [clojure.test :refer :all]
+            [tile-game.coordinates :refer :all]))
 
 (deftest adjacency-list
   (is (= (adjacent-to [1 1])

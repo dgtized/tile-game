@@ -1,11 +1,12 @@
 (ns tile-game.core
   (:require [clojure.core.async :as a]
-            [tile-game.graphics :refer [colors]]
-            [tile-game.board :as b]
-            [tile-game.solver :as solve])
-  (:import [javax.swing JFrame JPanel]
-           [java.awt Color Graphics Graphics2D Dimension Font]
-           [java.awt.event KeyAdapter KeyEvent]))
+            [tile-game
+             [board :as b]
+             [graphics :refer [colors]]
+             [solver :as solve]])
+  (:import [java.awt Color Dimension Font Graphics]
+           [java.awt.event KeyAdapter KeyEvent]
+           [javax.swing JFrame JPanel]))
 
 (set! *warn-on-reflection* true)
 
