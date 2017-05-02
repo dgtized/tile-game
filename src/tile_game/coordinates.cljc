@@ -13,6 +13,11 @@
 (defn add [[x y] [dx dy]]
   [(+ x dx) (+ y dy)])
 
+(def dir-delta {:up    [ 0 -1]
+                :down  [ 0  1]
+                :left  [-1  0]
+                :right [ 1  0]})
+
 (defn adjacent-to
   "Lists adjacent coordinates in clockwise order"
   [p]

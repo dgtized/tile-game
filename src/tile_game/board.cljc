@@ -7,11 +7,7 @@
       (shuffle board)
       board)))
 
-(def dir-delta {:up    [ 0 -1]
-                :down  [ 0  1]
-                :left  [-1  0]
-                :right [ 1  0]})
-(def direction? (set (keys dir-delta)))
+(def direction? (set (keys coords/dir-delta)))
 
 (defn dimension [board]
   (int (Math/sqrt (count board))))
@@ -51,7 +47,7 @@
        (adjacent-coords board (tile->coords board tile))))
 
 (defn direction->coords [board arg]
-  (coords/add (tile->coords board 0) (dir-delta arg)))
+  (coords/add (tile->coords board 0) (coords/dir-delta arg)))
 
 (defn direction->tile [board direction]
   (let [pos (direction->coords board direction)]
