@@ -32,7 +32,7 @@
       (if (b/tile-at-coord? board tile goal)
         path
         (when-let [best-move (first (ranked-moves board dist-map tile avoid))]
-          (when-let [moves (if (= tile 0)
+          (when-let [moves (if (zero? tile)
                              (list best-move)
                              (when-let [zero-path
                                         (move-to board 0
@@ -43,7 +43,7 @@
                    (reduce b/slide-tile board moves))))))))
 
 (defn goal-coord [board tile]
-  (b/index->coords board (dec (if (= tile 0)
+  (b/index->coords board (dec (if (zero? tile)
                                 (count board)
                                 tile))))
 
