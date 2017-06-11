@@ -10,7 +10,7 @@
             [lein-cljsbuild "1.1.5" :exclusions [[org.clojure/clojure]]]]
   :sources-paths ["src"]
   :profiles {:dev {:dependencies [[binaryage/devtools "0.9.4"]
-                                  [com.cemerick/piggieback "0.2.1"]
+                                  [com.cemerick/piggieback "0.2.2"]
                                   [org.clojure/test.check "0.9.0" :scope "test"]
                                   [figwheel-sidecar "0.5.10"]]
                    :source-paths ["src" "dev"] }}
