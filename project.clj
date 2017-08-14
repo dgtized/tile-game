@@ -7,7 +7,7 @@
                  [org.clojure/core.async "0.3.443"]
                  [reagent "0.7.0"]]
   :plugins [[lein-figwheel "0.5.12"]
-            [lein-cljsbuild "1.1.5" :exclusions [[org.clojure/clojure]]]]
+            [lein-cljsbuild "1.1.7" :exclusions [[org.clojure/clojure]]]]
   :sources-paths ["src"]
   :profiles {:dev {:dependencies [[binaryage/devtools "0.9.4"]
                                   [com.cemerick/piggieback "0.2.2"]
