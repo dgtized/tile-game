@@ -6,13 +6,13 @@
                  [org.clojure/clojurescript "1.9.854"]
                  [org.clojure/core.async "0.3.443"]
                  [reagent "0.7.0"]]
-  :plugins [[lein-figwheel "0.5.11"]
+  :plugins [[lein-figwheel "0.5.12"]
             [lein-cljsbuild "1.1.5" :exclusions [[org.clojure/clojure]]]]
   :sources-paths ["src"]
   :profiles {:dev {:dependencies [[binaryage/devtools "0.9.4"]
                                   [com.cemerick/piggieback "0.2.2"]
                                   [org.clojure/test.check "0.9.0" :scope "test"]
-                                  [figwheel-sidecar "0.5.11"]]
+                                  [figwheel-sidecar "0.5.12"]]
                    :source-paths ["src" "dev"] }}
   :repl-options {:nrepl-middleware [cemerick.piggieback/wrap-cljs-repl]}
   :clean-targets ^{:protect false}
