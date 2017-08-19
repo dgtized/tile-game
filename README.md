@@ -1,5 +1,7 @@
 # Tile Puzzle Game and Solver
 
+[![CircleCI](https://circleci.com/gh/dgtized/tile-game.svg?style=svg)](https://circleci.com/gh/dgtized/tile-game)
+
 A Platform and Solver for ordering NxN tiles into the correct order
 
 https://dgtized.github.io/tile-game
