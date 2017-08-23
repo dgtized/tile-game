@@ -31,8 +31,12 @@
 
 (defn board-size-slider [size command]
   [:div
-   [:button {:on-click #(async/put! command :reset)} "Reset"]
-   [:button {:on-click #(async/put! command :new-game)} "Shuffle"]
+   [:button {:on-click #(async/put! command :reset)
+             :title "Generate a new solved board at selected size."}
+    "Reset"]
+   [:button {:on-click #(async/put! command :new-game)
+             :title "Generate a new shuffled board at the selected size."}
+    "Shuffle"]
    [:label (str "Board size: " size)]
    [:input {:type "range" :value size :min 2 :max 8
             :on-change (fn [e] (swap! app-state assoc :size (.-target.value e)))
