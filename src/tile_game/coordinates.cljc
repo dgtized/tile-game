@@ -24,14 +24,14 @@
   (map (partial add p) [[0 -1] [1 0] [0 1] [-1 0]]))
 
 (defn closest-adjacent
-  "Given two points p1, p2 in the form [x y], return coordinate
-  adjacent to p1 that is closest to p2"
+  "Given two points p1, p2 in the form [x y], return coordinate adjacent to p1
+  that is closest to p2, in clockwise order of adjacent positions."
   [p1 p2]
   (if (= p1 p2)
     p2
     (apply min-key
            (partial distance p2)
-           (adjacent-to p1))))
+           (reverse (adjacent-to p1)))))
 
 (defn path-to
   "Shortest path from p1 to p2"

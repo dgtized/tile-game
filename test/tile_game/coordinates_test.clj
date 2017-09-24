@@ -4,7 +4,9 @@
 
 (deftest adjacency-list
   (is (= (adjacent-to [1 1])
-         '([1 0] [2 1] [1 2] [0 1]))))
+         '([1 0] [2 1] [1 2] [0 1])))
+  (is (= (adjacent-to [0 0])
+         '([0 -1] [1 0] [0 1] [-1 0]))))
 
 (deftest circumfrence-coordinates
   (is (= (circumfrence [0 0] [1 1])
