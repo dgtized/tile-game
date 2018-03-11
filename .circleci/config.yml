@@ -40,3 +40,6 @@ jobs:
 
       # run tests!
       - run: lein test2junit
+
+      - store_test_results:
+          path: target/test2junit/xml

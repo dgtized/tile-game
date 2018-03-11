@@ -10,8 +10,7 @@
             [lein-cljsbuild "1.1.7" :exclusions [[org.clojure/clojure]]]
             [test2junit "1.3.3"]]
   :sources-paths ["src"]
-  :test2junit-output-dir ~(or (System/getenv "CIRCLE_TEST_REPORTS")
-                              "target/test2junit")
+  :test2junit-output-dir "target/test2junit"
   :profiles {:dev {:dependencies [[binaryage/devtools "0.9.8"]
                                   [com.cemerick/piggieback "0.2.2"]
                                   [org.clojure/test.check "0.9.0" :scope "test"]
