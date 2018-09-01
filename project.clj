@@ -6,7 +6,7 @@
                  [org.clojure/clojurescript "1.10.339"]
                  [org.clojure/core.async "0.4.474"]
                  [reagent "0.8.1"]]
-  :plugins [[lein-figwheel "0.5.13"]
+  :plugins [[lein-figwheel "0.5.16"]
             [lein-cljsbuild "1.1.7" :exclusions [[org.clojure/clojure]]]
             [test2junit "1.3.3"]]
   :sources-paths ["src"]
