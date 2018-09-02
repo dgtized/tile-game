@@ -31,16 +31,18 @@
 
 (defn board-size-slider [size command]
   [:div
-   [:button {:on-click #(async/put! command :reset)
-             :title "Generate a new solved board at selected size."}
-    "Reset"]
-   [:button {:on-click #(async/put! command :new-game)
-             :title "Generate a new shuffled board at the selected size."}
-    "Shuffle"]
-   [:label (str "Board size: " size)]
-   [:input {:type "range" :value size :min 2 :max 8
-            :on-change (fn [e] (swap! app-state assoc :size (.-target.value e)))
-            :style {:width "25%"}}]])
+   [:div
+    [:label (str "Board size: " size)]
+    [:input {:type "range" :value size :min 2 :max 8
+             :on-change (fn [e] (swap! app-state assoc :size (.-target.value e)))
+             :style {:width "25%"}}]]
+   [:div
+    [:button {:on-click #(async/put! command :reset)
+              :title "Generate a new solved board at selected size."}
+     "Reset"]
+    [:button {:on-click #(async/put! command :new-game)
+              :title "Generate a new shuffled board at the selected size."}
+     "Shuffle"]]])
 
 (defn render-tile [[x y] tile command]
   (if-not (zero? tile)
@@ -92,7 +94,7 @@
            [:div [:button {:on-click #(async/put! command :solve)} "Run solver!"]]]))]
      [:details [:summary "Help"] (help-screen)]
      [:p
-      "© 2017 Charles L.G. Comstock "
+      "© 2017-2018 Charles L.G. Comstock "
       [:a {:href "https://github.com/dgtized/tile-game"} "(github)"]]]))
 
 (defn playback-moves
