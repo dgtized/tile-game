@@ -29,5 +29,4 @@
                            :optimizations :advanced
                            :source-map "resources/public/js/tile-game.js.map"}}}}
   :aliases
-  {"fig" ["trampoline" "run" "-m" "figwheel.main"]
-   "build-dev" ["trampoline" "run" "-m" "figwheel.main" "-b" "dev" "-r"]})
+  {"figwheel" ["trampoline" "run" "-m" "figwheel.main" "-b" "dev" "-r"]})
