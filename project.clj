@@ -3,7 +3,7 @@
   :min-lein-version "2.7.1"
   :main tile-game.core
   :dependencies [[org.clojure/clojure "1.10.0"]
-                 [org.clojure/clojurescript "1.10.439"]
+                 [org.clojure/clojurescript "1.10.520"]
                  [org.clojure/core.async "0.4.490"]
                  [reagent "0.8.1"]
                  [com.bhauman/figwheel-main "0.2.0"]
