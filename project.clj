@@ -2,11 +2,11 @@
   :description "A Tile Puzzle Game and Solver"
   :min-lein-version "2.7.1"
   :main tile-game.core
-  :dependencies [[org.clojure/clojure "1.10.0"]
+  :dependencies [[org.clojure/clojure "1.10.1"]
                  [org.clojure/clojurescript "1.10.520"]
-                 [org.clojure/core.async "0.4.490"]
+                 [org.clojure/core.async "0.4.500"]
                  [reagent "0.8.1"]
-                 [com.bhauman/figwheel-main "0.2.0"]
+                 [com.bhauman/figwheel-main "0.2.3"]
                  [com.bhauman/rebel-readline-cljs "0.1.4"]]
   :plugins [[lein-cljsbuild "1.1.7" :exclusions [[org.clojure/clojure]]]
             [test2junit "1.3.3"]]
