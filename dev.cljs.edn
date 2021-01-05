@@ -1,2 +1,2 @@
 {:main tile-game.grid
- :output-to "resources/public/js/tile-game.js"}
+ :output-to "target/public/js/tile-game.js"}

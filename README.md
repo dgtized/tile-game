@@ -49,27 +49,13 @@ causing the go-loop above to exit.
 
 For java client:
 
-    lein run [dim]
+    clojure -m tile-game.core
 
 For web client
 
-    lein figwheel
+    clojure -m figwheel.main -b dev -r
 
-visit http://localhost:3449
-
-### Emacs Cider REPL for Figwheel
-
-Evaluate the following in scratch:
-
-```elisp
-(require 'cider)
-(setq cider-cljs-lein-repl
-      "(do (require 'figwheel-sidecar.repl-api)
-           (figwheel-sidecar.repl-api/start-figwheel!)
-           (figwheel-sidecar.repl-api/cljs-repl))")
-```
-
-and then visit `src/tile-game/grid.cljs` and run `M-x cider-jack-in-clojurescript`.  See https://github.com/bhauman/lein-figwheel/wiki/Using-the-Figwheel-REPL-within-NRepl#integration-with-emacscider for more details.
+visit http://localhost:9500
 
 ## Note/Disclaimer
 
@@ -81,7 +67,7 @@ idiomatic Clojure.
 
 ## License
 
-Copyright (C) 2011-2017 Charles L.G. Comstock
+Copyright (C) 2011-2021 Charles L.G. Comstock
 
 Distributed under the MIT Public License, see LICENSE file
 

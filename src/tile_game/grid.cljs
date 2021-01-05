@@ -1,6 +1,7 @@
 (ns tile-game.grid
   (:require [cljs.core.async :as async]
             [reagent.core :as r]
+            [reagent.dom :as rdom]
             [tile-game.board :as b]
             [tile-game.graphics :refer [colors]]
             [tile-game.solver :as solve])
@@ -84,7 +85,7 @@
      [:div
       [:label "Analysis Mode"]
       [:input {:type "checkbox" :checked analysis-mode
-               :on-click #(swap! app-state update-in [:analysis-mode] not)}]
+               :on-change #(swap! app-state update-in [:analysis-mode] not)}]
       [:br]
       (when analysis-mode
         (if (solve/solved? board)
@@ -94,7 +95,7 @@
            [:div [:button {:on-click #(async/put! command :solve)} "Run solver!"]]]))]
      [:details [:summary "Help"] (help-screen)]
      [:p
-      "© 2017-2018 Charles L.G. Comstock "
+      "© 2017-2021 Charles L.G. Comstock "
       [:a {:href "https://github.com/dgtized/tile-game"} "(github)"]]]))
 
 (defn playback-moves
@@ -102,11 +103,10 @@
   [moves cancel delay]
   (go-loop [[move & remaining] moves]
     (if move
-      (do
-        (let [[_ c] (async/alts! [cancel (async/timeout delay)])]
-          (when (not= c cancel)
-            (slide! move)
-            (recur remaining))))
+      (let [[_ c] (async/alts! [cancel (async/timeout delay)])]
+        (when (not= c cancel)
+          (slide! move)
+          (recur remaining)))
       (async/close! cancel)))
   cancel)
 
@@ -144,7 +144,7 @@
     ;; Rebind onkeydown with set! so figwheel can always update
     (set! (.-onkeydown js/window) (handle-keydown command))
     (ui-event-loop command)
-    (r/render-component [(fn [] (tile-grid command))]
-                        (.getElementById js/document "grid"))))
+    (rdom/render [(fn [] (tile-grid command))]
+                 (.getElementById js/document "grid"))))
 
 (init)
