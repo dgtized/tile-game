@@ -1,4 +1,2 @@
-^{:css-dirs ["resources/public/css"]
-  :watch-dirs ["src"]}
 {:main tile-game.grid
  :output-to "target/public/js/tile-game.js"}
