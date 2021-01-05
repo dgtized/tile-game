@@ -1,6 +1,7 @@
 (ns tile-game.grid
   (:require [cljs.core.async :as async]
             [reagent.core :as r]
+            [reagent.dom :as rdom]
             [tile-game.board :as b]
             [tile-game.graphics :refer [colors]]
             [tile-game.solver :as solve])
@@ -143,7 +144,7 @@
     ;; Rebind onkeydown with set! so figwheel can always update
     (set! (.-onkeydown js/window) (handle-keydown command))
     (ui-event-loop command)
-    (r/render-component [(fn [] (tile-grid command))]
-                        (.getElementById js/document "grid"))))
+    (rdom/render [(fn [] (tile-grid command))]
+                 (.getElementById js/document "grid"))))
 
 (init)
