@@ -9,3 +9,4 @@ target/
 /.lein-failures
 /resources/public/js
 /.cpcache/
+/test-results/

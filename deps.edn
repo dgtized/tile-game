@@ -5,4 +5,20 @@
         ;; This is not dev only because of production build
         com.bhauman/figwheel-main {:mvn/version "0.2.12"}
         }
- :paths ["src" "target" "resources"]}
+ :paths ["src" "target" "resources"]
+ :aliases
+ {;; clj -A:kaocha -m kaocha.runner --config-file test/tests.edn
+  :kaocha {:extra-paths ["test"]
+           :extra-deps {lambdaisland/kaocha {:mvn/version "1.0.632"}
+                        lambdaisland/kaocha-junit-xml {:mvn/version "0.0-70"}
+                        lambdaisland/kaocha-cloverage {:mvn/version "1.0-45"}}}
+
+  ;; clj -Aclj-kondo --lint src
+  :clj-kondo
+  {:extra-deps {clj-kondo/clj-kondo {:mvn/version "RELEASE"}}
+   :main-opts ["-m" "clj-kondo.main"]}
+
+  ;; clj -Acoverage
+  :coverage {:extra-deps {cloverage/cloverage {:mvn/version "RELEASE"}}
+             :main-opts ["-m" "cloverage.coverage" "-p" "src"]}}
+ }

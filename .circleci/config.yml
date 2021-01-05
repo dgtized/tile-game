@@ -9,16 +9,19 @@ jobs:
     steps:
       - checkout
 
-      # Download and cache dependencies
       - restore_cache:
           keys:
-          - v1-dependencies-{{ checksum "deps.edn" }}
-          # fallback to using the latest cache if no exact match is found
-          - v1-dependencies-
+          - v1-deps-{{ checksum "deps.edn" }}
+          - v1-deps-
 
-      - run: clojure -Stree
+      - run: bin/ci
+      - store_test_results:
+          path: test-results/kaocha
+      - store_artifacts:
+          path: test-results/coverage
+          destination: coverage
 
       - save_cache:
           paths:
             - ~/.m2
-          key: v1-dependencies-{{ checksum "deps.edn" }}
+          key: v1-deps-{{ checksum "deps.edn" }}
