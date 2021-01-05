@@ -1,0 +1,6 @@
+{:main tile-game.grid
+ :clean-outputs true
+ :optimizations :advanced
+ :output-to "target/public/js/tile-game.js"
+ :output-dir "target/public/js"
+ :source-map "target/public/js/tile-game.js.map"}

@@ -8,3 +8,4 @@ target/
 /figwheel_server.log
 /.lein-failures
 /resources/public/js
+/.cpcache/
