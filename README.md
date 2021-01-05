@@ -57,20 +57,6 @@ For web client
 
 visit http://localhost:9500
 
-### Emacs Cider REPL for Figwheel
-
-Evaluate the following in scratch:
-
-```elisp
-(require 'cider)
-(setq cider-cljs-lein-repl
-      "(do (require 'figwheel-sidecar.repl-api)
-           (figwheel-sidecar.repl-api/start-figwheel!)
-           (figwheel-sidecar.repl-api/cljs-repl))")
-```
-
-and then visit `src/tile-game/grid.cljs` and run `M-x cider-jack-in-clojurescript`.  See https://github.com/bhauman/lein-figwheel/wiki/Using-the-Figwheel-REPL-within-NRepl#integration-with-emacscider for more details.
-
 ## Note/Disclaimer
 
 The solver is unfinished, I got caught up in other projects before
