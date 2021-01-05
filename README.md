@@ -53,9 +53,9 @@ For java client:
 
 For web client
 
-    lein figwheel
+    clojure -m figwheel.main -b dev -r
 
-visit http://localhost:3449
+visit http://localhost:9500
 
 ### Emacs Cider REPL for Figwheel
 
