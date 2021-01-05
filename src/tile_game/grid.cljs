@@ -102,11 +102,10 @@
   [moves cancel delay]
   (go-loop [[move & remaining] moves]
     (if move
-      (do
-        (let [[_ c] (async/alts! [cancel (async/timeout delay)])]
-          (when (not= c cancel)
-            (slide! move)
-            (recur remaining))))
+      (let [[_ c] (async/alts! [cancel (async/timeout delay)])]
+        (when (not= c cancel)
+          (slide! move)
+          (recur remaining)))
       (async/close! cancel)))
   cancel)
 

@@ -47,7 +47,7 @@
                                 (count board)
                                 tile))))
 
-(defn last-on-row? [board [x y]]
+(defn last-on-row? [board [x _]]
   (= x (dec (b/dimension board))))
 
 (defn move-sequence [board [tile goal solved] & more]
