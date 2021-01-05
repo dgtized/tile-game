@@ -49,7 +49,7 @@ causing the go-loop above to exit.
 
 For java client:
 
-    lein run [dim]
+    clojure -m tile-game.core
 
 For web client
 

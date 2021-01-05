@@ -72,7 +72,7 @@
             (.repaint panel)))
     render))
 
-(defn -main [& [num]]
+(defn -main []
   (start-gui))
 
 ;(def slide! (main 5))
