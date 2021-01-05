@@ -85,7 +85,7 @@
      [:div
       [:label "Analysis Mode"]
       [:input {:type "checkbox" :checked analysis-mode
-               :on-click #(swap! app-state update-in [:analysis-mode] not)}]
+               :on-change #(swap! app-state update-in [:analysis-mode] not)}]
       [:br]
       (when analysis-mode
         (if (solve/solved? board)
