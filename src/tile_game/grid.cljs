@@ -46,7 +46,7 @@
      "Shuffle"]]])
 
 (defn render-tile [[x y] tile command]
-  (if-not (zero? tile)
+  (when-not (zero? tile)
     (let [fill-color (nth colors tile)]
       [:g {:key (str "tile-" tile) :on-click #(async/put! command tile)}
        [:rect {:x (+ x 0.05) :y (+ y 0.05) :width 0.9 :height 0.9 :fill fill-color}]
