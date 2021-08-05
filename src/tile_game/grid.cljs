@@ -147,7 +147,7 @@
     ;; Rebind onkeydown with set! so figwheel can always update
     (set! (.-onkeydown js/window) (handle-keydown command))
     (ui-event-loop command)
-    (rdom/render [(fn [] (tile-grid command))]
+    (rdom/render [tile-grid command]
                  (.getElementById js/document "grid"))))
 
 (init)
