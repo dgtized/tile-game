@@ -48,10 +48,13 @@
 (defn render-tile [[x y] tile command]
   (when (pos? tile)
     (let [fill-color (nth colors tile)]
-      [:g {:key (str "tile-" tile) :on-click #(async/put! command tile)}
-       [:rect {:x (+ x 0.05) :y (+ y 0.05) :width 0.9 :height 0.9 :fill fill-color}]
-       [:text {:x (+ 0.5 x) :y (+ 0.65 y)
-               :font-family "Verdana" :font-size 0.4 :text-anchor "middle"}
+      [:g {:transform (str "translate(" x "," y ")")
+           :key (str "tile-" tile)
+           :on-click #(async/put! command tile)}
+       [:rect {:x 0.05 :y 0.05 :width 0.9 :height 0.9 :fill fill-color}]
+       [:text {:x 0.5 :y 0.5
+               :style {:dominant-baseline "central" :text-anchor "middle"
+                       :font-family "Verdana" :font-size 0.4}}
         (str tile)]])))
 
 (defn render-board [board dim command]
