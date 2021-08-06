@@ -63,20 +63,22 @@
      (let [tile (b/coords->tile board [x y])]
        (render-tile [x y] tile command)))])
 
+(def keymap
+  [{:key "Left", :desc "Move blank tile left", :code 37, :action :left}
+   {:key "Right", :desc "Move blank tile right", :code 39, :action :right}
+   {:key "Up", :desc "Move blank tile up", :code 38, :action :up}
+   {:key "Down", :desc "Move blank tile down", :code 40, :action :down}
+   {:key "N", :desc "Shuffle Board", :code 78, :action :new-game}
+   {:key "R", :desc "Reset Board", :code 82, :action :reset}
+   {:key "S", :desc "Solve next piece", :code 83, :action :solve}])
+
 (defn help-screen []
-  (let [help-keys {"Left" "Move blank tile left"
-                   "Right" "Move blank tile right"
-                   "Up" "Move blank tile up"
-                   "Down" "Move blank tile down"
-                   "N" "Shuffle Board"
-                   "R" "Reset Board"
-                   "S" "Solve next piece"}]
-    [:table {:style {:width "25%"}}
-     [:thead
-      [:tr [:th "Key"] [:th "Action"]]]
-     (into [:tbody]
-           (for [[key action] help-keys]
-             [:tr [:td key] [:td action]]))]))
+  [:table {:style {:width "25%"}}
+   [:thead
+    [:tr [:th "Key"] [:th "Action"]]]
+   (into [:tbody]
+         (for [{:keys [key desc]} keymap]
+           [:tr [:td key] [:td desc]]))])
 
 (defn tile-grid [command]
   (let [{:keys [board size analysis-mode moves]} @app-state
@@ -131,20 +133,13 @@
         (recur new-cancel)))
     (recur cancel)))
 
-(def codename
-  {37 :left
-   39 :right
-   38 :up
-   40 :down
-   78 :new-game
-   82 :reset
-   83 :solve})
-
 (defn handle-keydown [command]
-  (fn [e]
-    (when-let [key (codename (.-keyCode e))]
-      (.preventDefault e)
-      (async/put! command key))))
+  (let [codename (into {} (for [{:keys [code action]} keymap]
+                            [code action]))]
+    (fn [e]
+      (when-let [key (codename (.-keyCode e))]
+        (.preventDefault e)
+        (async/put! command key)))))
 
 (defn init []
   (let [command (async/chan)]
