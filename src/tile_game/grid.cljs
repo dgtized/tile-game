@@ -82,7 +82,9 @@
     [:center
      [:h1 "Tile Puzzle"]
      (render-board board dim command)
-     [:h4 (if (solve/solved? board) "Solved!" "Slide tiles with arrow keys or clicking on tile")]
+     [:h4 (if (solve/solved? board)
+            "Solved!"
+            "Slide tiles with arrow keys or clicking on tile")]
      [:details [:summary (str (count moves) " moves.")] (str moves)]
      (board-size-slider size command)
      [:div
