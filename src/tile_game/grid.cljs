@@ -64,17 +64,19 @@
        (render-tile [x y] tile command)))])
 
 (defn help-screen []
-  [:table {:style {:width "25%"}}
-   [:thead
-    [:tr [:th "Key"] [:th "Action"]]]
-   [:tbody
-    [:tr [:td "Left"] [:td "Move blank tile left"]]
-    [:tr [:td "Right"] [:td "Move blank tile right"]]
-    [:tr [:td "Up"] [:td "Move blank tile up"]]
-    [:tr [:td "Down"] [:td "Move blank tile down"]]
-    [:tr [:td "N"] [:td "Shuffle Board"]]
-    [:tr [:td "R"] [:td "Reset Board"]]
-    [:tr [:td "S"] [:td "Solve next piece"]]]])
+  (let [help-keys {"Left" "Move blank tile left"
+                   "Right" "Move blank tile right"
+                   "Up" "Move blank tile up"
+                   "Down" "Move blank tile down"
+                   "N" "Shuffle Board"
+                   "R" "Reset Board"
+                   "S" "Solve next piece"}]
+    [:table {:style {:width "25%"}}
+     [:thead
+      [:tr [:th "Key"] [:th "Action"]]]
+     (into [:tbody]
+           (for [[key action] help-keys]
+             [:tr [:td key] [:td action]]))]))
 
 (defn tile-grid [command]
   (let [{:keys [board size analysis-mode moves]} @app-state
