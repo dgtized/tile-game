@@ -1,11 +1,7 @@
 (ns tile-game.coordinates)
 
-(defn abs
-  [x]
-  #?(:clj (Math/abs (long x)) :cljs (Math/abs x)))
-
 (defn manhattan [p1 p2]
-  (map #(abs (- %1 %2)) p1 p2))
+  (map #(Math/abs (- %1 %2)) p1 p2))
 
 (defn distance [p1 p2]
   (apply + (manhattan p1 p2)))
