@@ -17,10 +17,9 @@
 
   ;; clj -Mclj-kondo --lint src
   :clj-kondo
-  {:extra-deps {clj-kondo/clj-kondo {:mvn/version "RELEASE"}}
+  {:extra-deps {clj-kondo/clj-kondo {:mvn/version "2022.02.09"}}
    :main-opts ["-m" "clj-kondo.main"]}
 
   ;; clj -Mcoverage
-  :coverage {:extra-deps {cloverage/cloverage {:mvn/version "RELEASE"}}
-             :main-opts ["-m" "cloverage.coverage" "-p" "src"]}}
- }
+  :coverage {:extra-deps {cloverage/cloverage {:mvn/version "1.2.0"}}
+             :main-opts ["-m" "cloverage.coverage" "-p" "src"]}}}
