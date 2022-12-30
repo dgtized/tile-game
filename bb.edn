@@ -1,0 +1,26 @@
+{:paths ["src"]
+ :tasks
+ {:requires ([babashka.fs :as fs]
+             [bb.tasks :as t])
+  clean
+  {:task (do (println "Remove target directory")
+             (fs/delete-tree "target"))}
+  compile
+  {:depends [clean]
+   :task (clojure "-Mfig -m figwheel.main -bo release")}
+  create-static-site
+  {:task (t/build-static-site
+          :build-dir "target/public/cljs-out/"
+          :from "resources/public"
+          :to "static-site")}
+  rewrite-index
+  {:task (t/rewrite-index :build-dir "target/public/cljs-out/"
+                          :from "resources/public/index.html"
+                          :to "static-site/index.html"
+                          :base-href "https://dgtized.github.io/tile-game/")}
+
+  build
+  {:depends [compile create-static-site rewrite-index]}
+
+  view
+  {:task (shell "xdg-open static-site/index.html")}}}
