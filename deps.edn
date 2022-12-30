@@ -3,12 +3,15 @@
         org.clojure/core.async {:mvn/version "1.6.673"}
         cljsjs/react {:mvn/version "18.2.0-1"}
         cljsjs/react-dom {:mvn/version "18.2.0-1"}
-        reagent/reagent {:mvn/version "1.1.1"}
-        ;; This is not dev only because of production build
-        com.bhauman/figwheel-main {:mvn/version "0.2.18"}}
- :paths ["src" "target" "resources"]
+        reagent/reagent {:mvn/version "1.1.1"}}
+ :paths ["src" "resources"]
  :aliases
- {;; clj -Mkaocha --config-file tests.edn
+ {:fig {:extra-paths ["target" "test"]
+        :extra-deps
+        {com.bhauman/figwheel-main {:mvn/version "0.2.18"}
+         fipp/fipp {:mvn/version "0.6.26"}}}
+
+  ;; clj -Mkaocha --config-file tests.edn
   :kaocha {:extra-paths ["test"]
            :extra-deps {lambdaisland/kaocha {:mvn/version "1.71.1119"}
                         lambdaisland/kaocha-junit-xml {:mvn/version "1.17.101"}
