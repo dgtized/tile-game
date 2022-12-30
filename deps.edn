@@ -1,25 +1,25 @@
-{:deps {org.clojure/clojure {:mvn/version "1.10.3"}
-        org.clojure/clojurescript {:mvn/version "1.11.4"}
-        org.clojure/core.async {:mvn/version "1.5.648"}
-        cljsjs/react {:mvn/version "18.0.0-rc.0-0"}
-        cljsjs/react-dom {:mvn/version "18.0.0-rc.0-0"}
-        reagent/reagent {:mvn/version "1.1.0"}
+{:deps {org.clojure/clojure {:mvn/version "1.11.1"}
+        org.clojure/clojurescript {:mvn/version "1.11.60"}
+        org.clojure/core.async {:mvn/version "1.6.673"}
+        cljsjs/react {:mvn/version "18.2.0-1"}
+        cljsjs/react-dom {:mvn/version "18.2.0-1"}
+        reagent/reagent {:mvn/version "1.1.1"}
         ;; This is not dev only because of production build
-        com.bhauman/figwheel-main {:mvn/version "0.2.16"}}
+        com.bhauman/figwheel-main {:mvn/version "0.2.18"}}
  :paths ["src" "target" "resources"]
  :aliases
  {;; clj -Mkaocha --config-file tests.edn
   :kaocha {:extra-paths ["test"]
-           :extra-deps {lambdaisland/kaocha {:mvn/version "1.63.998"}
-                        lambdaisland/kaocha-junit-xml {:mvn/version "0.0.76"}
-                        lambdaisland/kaocha-cloverage {:mvn/version "1.0.75"}}
+           :extra-deps {lambdaisland/kaocha {:mvn/version "1.71.1119"}
+                        lambdaisland/kaocha-junit-xml {:mvn/version "1.17.101"}
+                        lambdaisland/kaocha-cloverage {:mvn/version "1.1.89"}}
            :main-opts ["-m" "kaocha.runner"]}
 
   ;; clj -Mclj-kondo --lint src
   :clj-kondo
-  {:extra-deps {clj-kondo/clj-kondo {:mvn/version "2022.02.09"}}
+  {:extra-deps {clj-kondo/clj-kondo {:mvn/version "2022.12.10"}}
    :main-opts ["-m" "clj-kondo.main"]}
 
   ;; clj -Mcoverage
-  :coverage {:extra-deps {cloverage/cloverage {:mvn/version "1.2.2"}}
+  :coverage {:extra-deps {cloverage/cloverage {:mvn/version "1.2.4"}}
              :main-opts ["-m" "cloverage.coverage" "-p" "src"]}}}
