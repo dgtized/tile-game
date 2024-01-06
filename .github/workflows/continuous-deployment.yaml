@@ -24,7 +24,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Cache deps.edn dependencies
         uses: actions/cache@v3
@@ -34,13 +34,13 @@ jobs:
           restore-keys: clj-${{ runner.os }}-
 
       - name: Setup Java 11
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: 11
 
       - name: Setup Clojure
-        uses: DeLaGuardo/setup-clojure@11.0
+        uses: DeLaGuardo/setup-clojure@12.2
         with:
           cli: latest
           bb: latest
@@ -57,7 +57,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Cache deps.edn dependencies
         uses: actions/cache@v3
@@ -67,28 +67,28 @@ jobs:
           restore-keys: clj-${{ runner.os }}-
 
       - name: Setup Java 11
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: 11
 
       - name: Setup Clojure
-        uses: DeLaGuardo/setup-clojure@11.0
+        uses: DeLaGuardo/setup-clojure@12.2
         with:
           cli: latest
           bb: latest
 
       - name: Setup Pages
-        uses: actions/configure-pages@v2
+        uses: actions/configure-pages@v4
 
       - name: Build
         run: bb build
 
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v1
+        uses: actions/upload-pages-artifact@v3
         with:
           path: 'static-site'
 
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v1
+        uses: actions/deploy-pages@v4
