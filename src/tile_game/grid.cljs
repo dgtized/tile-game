@@ -104,7 +104,7 @@
            [:div [:button {:on-click #(async/put! command :solve)} "Run solver!"]]]))]
      [:details [:summary "Help"] (help-screen)]
      [:p
-      "© 2017-2023 Charles L.G. Comstock "
+      "© 2017-2024 Charles L.G. Comstock "
       [:a {:href "https://github.com/dgtized/tile-game"} "(github)"]]]))
 
 (defn playback-moves

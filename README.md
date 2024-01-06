@@ -67,7 +67,7 @@ idiomatic Clojure.
 
 ## License
 
-Copyright (C) 2011-2023 Charles L.G. Comstock
+Copyright (C) 2011-2024 Charles L.G. Comstock
 
 Distributed under the MIT Public License, see LICENSE file
 
