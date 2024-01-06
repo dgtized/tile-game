@@ -11,3 +11,4 @@ target/
 /.cpcache/
 /test-results/
 static-site
+/.clj-kondo/.cache/
