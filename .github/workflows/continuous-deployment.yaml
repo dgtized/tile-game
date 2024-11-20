@@ -14,8 +14,8 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  test:
-    name: Test
+  build:
+    name: Build
     runs-on: ubuntu-latest
 
     permissions:
@@ -48,36 +48,6 @@ jobs:
 
       - name: Test
         run: bin/kaocha
-
-  build:
-    name: Build
-    needs: test
-    runs-on: ubuntu-latest
-
-    permissions:
-      contents: read
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Cache deps.edn dependencies
-        uses: actions/cache@v4
-        with:
-          path: ~/.m2/repository
-          key: clj-${{ runner.os }}-${{ hashFiles('**/deps.edn') }}
-          restore-keys: clj-${{ runner.os }}-
-
-      - name: Setup Java
-        uses: actions/setup-java@v4
-        with:
-          distribution: temurin
-          java-version: 21
-
-      - name: Setup Clojure
-        uses: DeLaGuardo/setup-clojure@13.0
-        with:
-          cli: latest
-          bb: latest
 
       - name: Build
         run: bb build
