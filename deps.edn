@@ -8,7 +8,7 @@
  :aliases
  {:fig {:extra-paths ["target" "test"]
         :extra-deps
-        {com.bhauman/figwheel-main {:mvn/version "0.2.18"}
+        {com.bhauman/figwheel-main {:mvn/version "0.2.20"}
          fipp/fipp {:mvn/version "0.6.27"}}}
 
   ;; clj -Mkaocha --config-file tests.edn
