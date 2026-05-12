@@ -1,5 +1,5 @@
 {:deps {org.clojure/clojure {:mvn/version "1.12.5"}
-        org.clojure/clojurescript {:mvn/version "1.12.134"}
+        org.clojure/clojurescript {:mvn/version "1.12.145"}
         org.clojure/core.async {:mvn/version "1.9.865"}
         cljsjs/react {:mvn/version "18.3.1-1"}
         cljsjs/react-dom {:mvn/version "18.3.1-1"}
