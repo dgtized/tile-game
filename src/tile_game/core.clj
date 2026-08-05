@@ -12,7 +12,7 @@
 
 (def scale 150)
 
-(defn render-tile [#^Graphics g board [x y]]
+(defn render-tile [^Graphics g board [x y]]
   (let [tile (b/coords->tile board [x y])
         color (if (zero? tile)
                 Color/WHITE
@@ -24,7 +24,7 @@
       (.setColor Color/BLACK)
       (.setFont (Font. "Serif" (Font/PLAIN) 32)))
     (when (pos? tile)
-      (.drawString g (format "%d" tile)
+      (.drawString g ^String (format "%d" tile)
                    (int (+ cx (quot scale 2)))
                    (int (+ cy (quot scale 2)))))))
 
