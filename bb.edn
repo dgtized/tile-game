@@ -5,6 +5,8 @@
   clean
   {:task (do (println "Remove target directory")
           (fs/delete-tree "target"))}
+  lint
+  {:task (clojure "-Mclj-kondo --parallel --lint src test")}
   compile
   {:depends [clean]
    :task (clojure "-Mfig -m figwheel.main -bo release")}
