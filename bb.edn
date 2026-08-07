@@ -6,17 +6,21 @@
   {:task (do (println "Remove target directory")
           (fs/delete-tree "target"))}
   lint
-  {:task (clojure "-Mclj-kondo --parallel --lint src test")}
+  {:doc "Lint source and test with clj-kondo"
+   :task (clojure "-Mclj-kondo --parallel --lint src test")}
   compile
   {:depends [clean]
+   :doc "Compile release with figwheel"
    :task (clojure "-Mfig -m figwheel.main -bo release")}
   create-static-site
-  {:task (t/build-static-site
+  {:doc "Create release in static-site"
+   :task (t/build-static-site
           :build-dir "target/public/cljs-out/"
           :from "resources/public"
           :to "static-site")}
   rewrite-index
-  {:task (t/rewrite-index :build-dir "target/public/cljs-out/"
+  {:doc "Rewrite index from resources/public/index.html for paths in static-site"
+   :task (t/rewrite-index :build-dir "target/public/cljs-out/"
           :from "resources/public/index.html"
           :to "static-site/index.html"
           :base-href "https://dgtized.github.io/tile-game/")}
