@@ -47,7 +47,7 @@ jobs:
         run: bb lint
 
       - name: Test
-        run: bin/kaocha
+        run: bb test
 
       - name: Build
         run: bb build

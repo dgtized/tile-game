@@ -30,5 +30,10 @@
   build
   {:depends [compile create-static-site rewrite-index]}
 
+  ;; TODO: remove bin/kaocha and incorporate argument handling somehow?
+  test
+  {:doc "Run automated tests"
+   :task (clojure "-Mkaocha --config-file tests.edn")}
+
   view
   {:task (shell "xdg-open static-site/index.html")}}}
