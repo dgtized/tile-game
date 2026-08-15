@@ -102,10 +102,7 @@
           [:div
            (str "Suggested Moves: " (solve/solve-next board))
            [:div [:button {:on-click #(async/put! command :solve)} "Run solver!"]]]))]
-     [:details [:summary "Help"] (help-screen)]
-     [:p
-      "© 2017-2026 Charles L.G. Comstock "
-      [:a {:href "https://github.com/dgtized/tile-game"} "(github)"]]]))
+     [:details [:summary "Help"] (help-screen)]]))
 
 (defn playback-moves
   "Plays recorded moves to board with a delay and ability to cancel playback"
