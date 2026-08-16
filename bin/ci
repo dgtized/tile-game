@@ -3,9 +3,10 @@
 set -exuo pipefail
 
 mkdir -p test-results/{kaocha,coverage}
-bin/kaocha --plugin cloverage \
-           --cov-output test-results/coverage \
-           --plugin kaocha.plugin/junit-xml \
-           --junit-xml-file test-results/kaocha/results.xml
+clojure -Mkaocha --config-file tests.edn \
+        --plugin cloverage \
+        --cov-output test-results/coverage \
+        --plugin kaocha.plugin/junit-xml \
+        --junit-xml-file test-results/kaocha/results.xml
 
 clojure -Mclj-kondo --lint src
