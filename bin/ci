@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+# mostly-deprecated, this is used by circleci
 set -exuo pipefail
 
 mkdir -p test-results/{kaocha,coverage}
