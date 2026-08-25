@@ -1,7 +1,7 @@
 {:paths ["src"]
  :deps {io.github.dgtized/carrier
         {:git/url "https://github.com/dgtized/carrier.git"
-         :git/sha "cf5c83598a65250f61199c86e69ba1797c2ce9d1"}}
+         :git/sha "1c8c5e3c755f0197d5d8e94dbdb6d0e681cc749d"}}
  :tasks
  {:requires ([babashka.fs :as fs]
              [carrier.tasks :as t])
@@ -9,7 +9,7 @@
   {:task (t/clean "target" "static-site")}
   lint
   {:doc "Lint source and test with clj-kondo"
-   :task (clojure "-Mclj-kondo --parallel --lint src test")}
+   :task (t/clj-kondo "src" "test")}
   compile
   {:depends [clean]
    :doc "Compile release with figwheel"
