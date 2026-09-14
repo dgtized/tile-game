@@ -1,5 +1,6 @@
 # Tile Puzzle Game and Solver
 
+[![CI](https://github.com/dgtized/tile-game/actions/workflows/continuous-deployment.yaml/badge.svg?branch=main)](https://github.com/dgtized/tile-game/actions/workflows/continuous-deployment.yaml)
 [![CircleCI](https://circleci.com/gh/dgtized/tile-game.svg?style=svg)](https://circleci.com/gh/dgtized/tile-game)
 
 A Platform and Solver for ordering NxN tiles into the correct order
