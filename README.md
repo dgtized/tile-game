@@ -54,7 +54,7 @@ For java client:
 
 For web client
 
-    clojure -m figwheel.main -b dev -r
+    clojure -Mfig -m figwheel.main -b dev -r
 
 visit http://localhost:9500
 
